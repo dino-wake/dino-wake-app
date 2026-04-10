@@ -1,4 +1,5 @@
-import { Text, View } from 'react-native';
+import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
 
 type TimeDisplayProps = {
   time: string;
@@ -6,19 +7,19 @@ type TimeDisplayProps = {
 
 export function TimeDisplay({ time }: TimeDisplayProps) {
   return (
-    <View className="items-center gap-1">
+    <VStack className="items-center" space="xs">
       <Text
-        className="font-outfit text-[72px] font-bold text-dino-text-primary"
-        style={{ letterSpacing: -2 }}
+        className="font-outfit font-bold text-dino-text-primary"
+        style={{ fontSize: 72, letterSpacing: -2 }}
       >
         {time}
       </Text>
       <Text
-        className="text-[12px] font-semibold text-dino-accent-green"
-        style={{ letterSpacing: 3 }}
+        className="font-semibold text-dino-accent-green"
+        style={{ fontSize: 12, letterSpacing: 3 }}
       >
         TIME TO GROW TOGETHER
       </Text>
-    </View>
+    </VStack>
   );
 }

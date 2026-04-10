@@ -1,4 +1,6 @@
-import { Text, View } from 'react-native';
+import { Box } from '@/components/ui/box';
+import { Text } from '@/components/ui/text';
+import { View } from 'react-native';
 
 type AdBannerProps = {
   title: string;
@@ -6,7 +8,7 @@ type AdBannerProps = {
 
 export function AdBanner({ title }: AdBannerProps) {
   return (
-    <View className="h-[100px] overflow-hidden rounded-2xl bg-[#F5F0EA] flex-row items-center px-4">
+    <Box className="h-[100px] overflow-hidden rounded-2xl bg-[#F5F0EA] flex-row items-center px-4">
       <View className="flex-1 gap-1">
         <View className="self-start rounded bg-[#8C8C8C] px-1.5 py-0.5">
           <Text className="text-[9px] font-bold text-white">AD</Text>
@@ -20,6 +22,6 @@ export function AdBanner({ title }: AdBannerProps) {
         </Text>
       </View>
       <Text style={{ fontSize: 48 }}>🦖</Text>
-    </View>
+    </Box>
   );
 }
