@@ -17,7 +17,7 @@ module.exports = {
     },
     {
       pattern:
-        /(bg|border|text|stroke|fill)-dino-(mint|mint-light|accent-green|accent-orange|accent-coral|bg|card-bg|border|border-strong|text-primary|text-secondary|text-tertiary|tab-inactive)/,
+        /(bg|border|text|stroke|fill)-dino-(mint|mint-light|accent-green|accent-green-light|accent-green-dark|accent-green-soft|accent-orange|accent-orange-soft|accent-orange-dark|accent-coral|bg|warm-bg|card-bg|border|border-strong|text-primary|text-secondary|text-tertiary|tab-inactive|neutral)/,
     },
   ],
   theme: {
@@ -182,9 +182,15 @@ module.exports = {
           mint: 'rgb(var(--color-dino-mint)/<alpha-value>)',
           'mint-light': 'rgb(var(--color-dino-mint-light)/<alpha-value>)',
           'accent-green': 'rgb(var(--color-dino-accent-green)/<alpha-value>)',
+          'accent-green-light': 'rgb(var(--color-dino-accent-green-light)/<alpha-value>)',
+          'accent-green-dark': 'rgb(var(--color-dino-accent-green-dark)/<alpha-value>)',
+          'accent-green-soft': 'rgb(var(--color-dino-accent-green-soft)/<alpha-value>)',
           'accent-orange': 'rgb(var(--color-dino-accent-orange)/<alpha-value>)',
+          'accent-orange-soft': 'rgb(var(--color-dino-accent-orange-soft)/<alpha-value>)',
+          'accent-orange-dark': 'rgb(var(--color-dino-accent-orange-dark)/<alpha-value>)',
           'accent-coral': 'rgb(var(--color-dino-accent-coral)/<alpha-value>)',
           bg: 'rgb(var(--color-dino-bg)/<alpha-value>)',
+          'warm-bg': 'rgb(var(--color-dino-warm-bg)/<alpha-value>)',
           'card-bg': 'rgb(var(--color-dino-card-bg)/<alpha-value>)',
           border: 'rgb(var(--color-dino-border)/<alpha-value>)',
           'border-strong': 'rgb(var(--color-dino-border-strong)/<alpha-value>)',
@@ -192,6 +198,7 @@ module.exports = {
           'text-secondary': 'rgb(var(--color-dino-text-secondary)/<alpha-value>)',
           'text-tertiary': 'rgb(var(--color-dino-text-tertiary)/<alpha-value>)',
           'tab-inactive': 'rgb(var(--color-dino-tab-inactive)/<alpha-value>)',
+          neutral: 'rgb(var(--color-dino-neutral)/<alpha-value>)',
         },
       },
       fontFamily: {
@@ -206,17 +213,26 @@ module.exports = {
       fontSize: {
         '2xs': '10px',
         /* Dino typography scale */
-        'dino-time': '36px',    /* 시간 표시: 36px 700 */
-        'dino-title': '22px',  /* 페이지 제목: 22px 700 */
-        'dino-section': '15px', /* 섹션 제목: 15px 700 */
-        'dino-body': '15px',    /* 본문: 15px 500 */
-        'dino-sub': '11px',    /* 보조 텍스트: 11px 500 */
-        'dino-label': '12px',  /* 섹션 레이블: 12px 600 */
-        'dino-tab': '10px',    /* 탭 레이블: 10px */
+        'dino-display': '72px',  /* 히어로 시간 표시: 72px 700 */
+        'dino-alarm': '32px',    /* 알람 카드 시간: 32px 700 */
+        'dino-emoji': '48px',    /* 이모지: 48px */
+        'dino-time': '36px',     /* 시간 표시: 36px 700 */
+        'dino-title': '22px',    /* 페이지 제목: 22px 700 */
+        'dino-section': '15px',  /* 섹션 제목: 15px 700 */
+        'dino-body': '15px',     /* 본문: 15px 500 */
+        'dino-body-md': '14px',  /* 중간 본문: 14px 500 */
+        'dino-tag': '13px',      /* 태그 텍스트: 13px */
+        'dino-sub': '11px',      /* 보조 텍스트: 11px 500 */
+        'dino-label': '12px',    /* 섹션 레이블: 12px 600 */
+        'dino-badge': '9px',     /* 뱃지 레이블: 9px 700 */
+        'dino-tab': '10px',      /* 탭 레이블: 10px */
       },
       letterSpacing: {
-        'dino-time': '-1px',   /* 시간 표시 */
-        'dino-label': '0.4px', /* 섹션 레이블 */
+        'dino-display': '-2px',  /* 히어로 시간 */
+        'dino-time': '-1px',     /* 시간 표시 */
+        'dino-label': '0.4px',  /* 섹션 레이블 */
+        'dino-caps': '2px',     /* 캡스 레이블 */
+        'dino-wide': '3px',     /* 넓은 캡스 레이블 */
       },
       boxShadow: {
         'hard-1': '-2px 2px 8px 0px rgba(38, 38, 38, 0.20)',

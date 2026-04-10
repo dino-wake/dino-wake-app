@@ -8,16 +8,10 @@ type TimeDisplayProps = {
 export function TimeDisplay({ time }: TimeDisplayProps) {
   return (
     <VStack className="items-center" space="xs">
-      <Text
-        className="font-outfit font-bold text-dino-text-primary"
-        style={{ fontSize: 72, letterSpacing: -2 }}
-      >
+      <Text className="text-dino-display tracking-dino-display font-outfit font-bold text-dino-text-primary">
         {time}
       </Text>
-      <Text
-        className="font-semibold text-dino-accent-green"
-        style={{ fontSize: 12, letterSpacing: 3 }}
-      >
+      <Text className="text-dino-label tracking-dino-wide font-semibold text-dino-accent-green">
         TIME TO GROW TOGETHER
       </Text>
     </VStack>

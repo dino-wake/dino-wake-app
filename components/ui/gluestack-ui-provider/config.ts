@@ -156,19 +156,26 @@ export const config = {
     '--color-indicator-error': '185 28 28',
 
     /* Dino Custom Tokens */
-    '--color-dino-mint': '184 232 208',          /* #B8E8D0 */
-    '--color-dino-mint-light': '232 248 240',    /* #E8F8F0 */
-    '--color-dino-accent-green': '61 138 90',   /* #3D8A5A */
-    '--color-dino-accent-orange': '232 160 84', /* #E8A054 */
-    '--color-dino-accent-coral': '216 149 117', /* #D89575 */
-    '--color-dino-bg': '245 244 241',            /* #F5F4F1 */
-    '--color-dino-card-bg': '255 255 255',       /* #FFFFFF */
-    '--color-dino-border': '229 228 225',        /* #E5E4E1 */
-    '--color-dino-border-strong': '209 208 205', /* #D1D0CD */
-    '--color-dino-text-primary': '26 25 24',     /* #1A1918 */
-    '--color-dino-text-secondary': '109 108 106', /* #6D6C6A */
-    '--color-dino-text-tertiary': '156 155 153', /* #9C9B99 */
-    '--color-dino-tab-inactive': '168 167 165',  /* #A8A7A5 */
+    '--color-dino-mint': '184 232 208',                /* #B8E8D0 */
+    '--color-dino-mint-light': '232 248 240',          /* #E8F8F0 */
+    '--color-dino-accent-green': '61 138 90',          /* #3D8A5A */
+    '--color-dino-accent-green-light': '125 203 164',  /* #7DCBA4 */
+    '--color-dino-accent-green-dark': '43 122 75',     /* #2B7A4B */
+    '--color-dino-accent-green-soft': '224 245 236',   /* #E0F5EC */
+    '--color-dino-accent-orange': '232 160 84',        /* #E8A054 */
+    '--color-dino-accent-orange-soft': '255 240 232',  /* #FFF0E8 */
+    '--color-dino-accent-orange-dark': '217 137 58',   /* #D9893A */
+    '--color-dino-accent-coral': '216 149 117',        /* #D89575 */
+    '--color-dino-bg': '245 244 241',                  /* #F5F4F1 */
+    '--color-dino-warm-bg': '245 240 234',             /* #F5F0EA */
+    '--color-dino-card-bg': '255 255 255',             /* #FFFFFF */
+    '--color-dino-border': '229 228 225',              /* #E5E4E1 */
+    '--color-dino-border-strong': '209 208 205',       /* #D1D0CD */
+    '--color-dino-text-primary': '26 25 24',           /* #1A1918 */
+    '--color-dino-text-secondary': '109 108 106',      /* #6D6C6A */
+    '--color-dino-text-tertiary': '156 155 153',       /* #9C9B99 */
+    '--color-dino-tab-inactive': '168 167 165',        /* #A8A7A5 */
+    '--color-dino-neutral': '140 140 140',             /* #8C8C8C */
   }),
   dark: vars({
     /* Primary — accent-green (inverted for dark) */
@@ -327,9 +334,15 @@ export const config = {
     '--color-dino-mint': '80 160 112',
     '--color-dino-mint-light': '36 83 54',
     '--color-dino-accent-green': '80 160 112',
+    '--color-dino-accent-green-light': '125 203 164',  /* same in dark */
+    '--color-dino-accent-green-dark': '125 203 164',   /* inverted for dark */
+    '--color-dino-accent-green-soft': '36 83 54',      /* dark green bg */
     '--color-dino-accent-orange': '232 160 84',
+    '--color-dino-accent-orange-soft': '80 50 30',     /* dark orange bg */
+    '--color-dino-accent-orange-dark': '232 160 84',   /* lighter orange for dark */
     '--color-dino-accent-coral': '216 149 117',
     '--color-dino-bg': '22 21 19',
+    '--color-dino-warm-bg': '55 50 45',               /* dark warm bg */
     '--color-dino-card-bg': '30 29 27',
     '--color-dino-border': '58 57 55',
     '--color-dino-border-strong': '80 79 77',
@@ -337,5 +350,6 @@ export const config = {
     '--color-dino-text-secondary': '184 183 181',
     '--color-dino-text-tertiary': '122 121 119',
     '--color-dino-tab-inactive': '100 99 97',
+    '--color-dino-neutral': '100 100 100',             /* neutral gray dark */
   }),
 };

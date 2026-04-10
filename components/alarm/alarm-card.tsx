@@ -1,5 +1,6 @@
 import { Trash2 } from 'lucide-react-native';
 
+import { Colors } from '@/constants/theme';
 import { Box } from '@/components/ui/box';
 import { HStack } from '@/components/ui/hstack';
 import { Pressable } from '@/components/ui/pressable';
@@ -21,7 +22,7 @@ export function AlarmCard({ time, label, days, enabled, onToggle, onDelete }: Al
     <Box
       className="rounded-2xl bg-background-0 p-4"
       style={{
-        shadowColor: '#1A1918',
+        shadowColor: Colors.light.shadow,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.03,
         shadowRadius: 8,
@@ -30,27 +31,24 @@ export function AlarmCard({ time, label, days, enabled, onToggle, onDelete }: Al
     >
       <VStack space="xs">
         <HStack className="items-center gap-2">
-          <Text
-            className="font-bold text-dino-text-primary"
-            style={{ fontSize: 32, letterSpacing: -1 }}
-          >
+          <Text className="text-dino-alarm tracking-dino-time font-bold text-dino-text-primary">
             {time}
           </Text>
-          <Box className="rounded-full bg-[#FFF0E8] px-2.5 py-1">
-            <Text className="text-[12px] font-medium text-[#D9893A]">{label}</Text>
+          <Box className="rounded-full bg-dino-accent-orange-soft px-2.5 py-1">
+            <Text className="text-dino-label font-medium text-dino-accent-orange-dark">{label}</Text>
           </Box>
           <Box className="flex-1" />
           <Switch
             value={enabled}
             onValueChange={onToggle}
-            trackColor={{ false: '#E5E4E1', true: '#7DCBA4' }}
+            trackColor={{ false: Colors.light.border, true: Colors.light.accentGreenLight }}
             thumbColor="#FFFFFF"
           />
           <Pressable onPress={onDelete} hitSlop={8}>
-            <Trash2 size={18} color="#9C9B99" />
+            <Trash2 size={18} color={Colors.light.icon} />
           </Pressable>
         </HStack>
-        <Text className="text-[11px] text-dino-text-tertiary">{days}</Text>
+        <Text className="text-dino-sub text-dino-text-tertiary">{days}</Text>
       </VStack>
     </Box>
   );

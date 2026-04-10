@@ -9,17 +9,12 @@ export function DinoEggSection() {
       <Image
         source={require("@/assets/images/dino_egg.png")}
         size="none"
-        className="h-[134px] w-[127px]"
         resizeMode="contain"
         alt="dino egg"
-        width={127}
-        height={134}
+        style={{ width: 127, height: 134 }}
       />
-      <Box className="rounded-full bg-[#E0F5EC] px-4 py-1.5">
-        <Text
-          className="font-semibold text-[#7DCBA4]"
-          style={{ fontSize: 12, letterSpacing: 2 }}
-        >
+      <Box className="rounded-full bg-dino-accent-green-soft px-4 py-1.5">
+        <Text className="text-dino-label tracking-dino-caps font-semibold text-dino-accent-green-light">
           DREAMING...
         </Text>
       </Box>

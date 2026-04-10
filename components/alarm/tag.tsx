@@ -7,8 +7,8 @@ type TagProps = {
 
 export function TagActive({ label }: TagProps) {
   return (
-    <Box className="rounded-full bg-[#7DCBA4] px-3.5 py-1.5">
-      <Text className="text-[13px] font-semibold text-[#2B7A4B]">{label}</Text>
+    <Box className="rounded-full bg-dino-accent-green-light px-3.5 py-1.5">
+      <Text className="text-dino-tag font-semibold text-dino-accent-green-dark">{label}</Text>
     </Box>
   );
 }
@@ -16,7 +16,7 @@ export function TagActive({ label }: TagProps) {
 export function TagInactive({ label }: TagProps) {
   return (
     <Box className="rounded-full border border-dino-border px-3.5 py-1.5">
-      <Text className="text-[13px] font-medium text-dino-text-secondary">{label}</Text>
+      <Text className="text-dino-tag font-medium text-dino-text-secondary">{label}</Text>
     </Box>
   );
 }
