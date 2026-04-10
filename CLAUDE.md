@@ -46,6 +46,26 @@ constants/
 - 성능이 중요한 애니메이션은 **React Native Reanimated** 사용
 - JS 스레드 애니메이션 지양 → `useSharedValue`, `useAnimatedStyle` 활용
 
+## 문서 목차
+
+### 디자인
+| 문서 | 경로 | 설명 |
+|------|------|------|
+| 스타일링 규칙 | [docs/design-docs/styling.md](docs/design-docs/styling.md) | 색상 토큰, 스페이싱, 다크 모드, 플랫폼별 스타일 |
+| 레이아웃 규칙 | [docs/design-docs/layout.md](docs/design-docs/layout.md) | Box/HStack/VStack/Grid 사용법, 컴포넌트 구성 패턴, 타이포그래피 |
+| 폼 컴포넌트 규칙 | [docs/design-docs/forms.md](docs/design-docs/forms.md) | FormControl 래핑, Input/Checkbox/Radio/Switch/Slider 사용법 |
+| 오버레이 규칙 | [docs/design-docs/overlays.md](docs/design-docs/overlays.md) | Modal/AlertDialog/Actionsheet/Drawer/Popover/Tooltip 선택 기준 및 사용법 |
+
+### 엔지니어링
+| 문서 | 경로 | 설명 |
+|------|------|------|
+| HTTP 요청 규칙 | [docs/hooks/request-http.md](docs/hooks/request-http.md) | React Query를 통한 fetch 함수, query/mutation 훅 작성 규칙 |
+
+### 기획
+| 문서 | 경로 | 설명 |
+|------|------|------|
+| 핵심 PRD | [docs/plans/PRD_CORE.md](docs/plans/PRD_CORE.md) | 핵심 기능 제품 요구사항 정의서 |
+
 ## 실행 명령어
 
 ```bash
@@ -55,3 +75,16 @@ pnpm android        # Android 에뮬레이터
 pnpm web            # 웹 브라우저
 pnpm lint           # ESLint
 ```
+
+## gstack (recommended)
+
+This project uses [gstack](https://github.com/garrytan/gstack) for AI-assisted workflows.
+Install it for the best experience:
+
+```bash
+git clone --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
+cd ~/.claude/skills/gstack && ./setup --team
+```
+
+Skills like /qa, /ship, /review, /investigate, and /browse become available after install.
+Use /browse for all web browsing. Use ~/.claude/skills/gstack/... for gstack file paths.
