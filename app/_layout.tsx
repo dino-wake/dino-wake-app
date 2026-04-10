@@ -58,6 +58,20 @@ export default function RootLayout() {
         >
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="alarm-ringing" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
+            <Stack.Screen name="auth/login" options={{ headerShown: false }} />
+            <Stack.Screen name="auth/signup" options={{ headerShown: false }} />
+            <Stack.Screen name="auth/forgot-password" options={{ headerShown: false }} />
+            <Stack.Screen name="auth/reset-password" options={{ headerShown: false }} />
+            <Stack.Screen name="my-page" options={{ headerShown: false }} />
+            <Stack.Screen name="dino-skin" options={{ headerShown: false }} />
+            <Stack.Screen name="point-history" options={{ headerShown: false }} />
+            <Stack.Screen name="weather-detail" options={{ headerShown: false }} />
+            <Stack.Screen name="emotion-dial" options={{ headerShown: false }} />
+            <Stack.Screen name="terms" options={{ headerShown: false }} />
+            <Stack.Screen name="privacy" options={{ headerShown: false }} />
+            <Stack.Screen name="app-version" options={{ headerShown: false }} />
+            <Stack.Screen name="temp/sitemap" options={{ headerShown: false }} />
           </Stack>
           <StatusBar style="auto" />
         </ThemeProvider>
