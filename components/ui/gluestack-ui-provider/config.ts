@@ -3,20 +3,21 @@ import { vars } from 'nativewind';
 
 export const config = {
   light: vars({
-    '--color-primary-0': '179 179 179',
-    '--color-primary-50': '153 153 153',
-    '--color-primary-100': '128 128 128',
-    '--color-primary-200': '115 115 115',
-    '--color-primary-300': '102 102 102',
-    '--color-primary-400': '82 82 82',
-    '--color-primary-500': '51 51 51',
-    '--color-primary-600': '41 41 41',
-    '--color-primary-700': '31 31 31',
-    '--color-primary-800': '13 13 13',
-    '--color-primary-900': '10 10 10',
-    '--color-primary-950': '8 8 8',
+    /* Primary — accent-green (#3D8A5A) */
+    '--color-primary-0': '240 249 244',
+    '--color-primary-50': '220 243 231',
+    '--color-primary-100': '184 232 208',
+    '--color-primary-200': '150 210 179',
+    '--color-primary-300': '110 185 145',
+    '--color-primary-400': '80 160 112',
+    '--color-primary-500': '61 138 90',
+    '--color-primary-600': '48 110 72',
+    '--color-primary-700': '36 83 54',
+    '--color-primary-800': '25 60 40',
+    '--color-primary-900': '18 43 28',
+    '--color-primary-950': '10 25 16',
 
-    /* Secondary  */
+    /* Secondary */
     '--color-secondary-0': '253 253 253',
     '--color-secondary-50': '251 251 251',
     '--color-secondary-100': '246 246 246',
@@ -100,75 +101,91 @@ export const config = {
     '--color-info-900': '5 64 93',
     '--color-info-950': '3 38 56',
 
-    /* Typography */
-    '--color-typography-0': '254 254 255',
-    '--color-typography-50': '245 245 245',
-    '--color-typography-100': '229 229 229',
-    '--color-typography-200': '219 219 220',
-    '--color-typography-300': '212 212 212',
-    '--color-typography-400': '163 163 163',
-    '--color-typography-500': '140 140 140',
-    '--color-typography-600': '115 115 115',
-    '--color-typography-700': '82 82 82',
-    '--color-typography-800': '64 64 64',
-    '--color-typography-900': '38 38 39',
-    '--color-typography-950': '23 23 23',
+    /* Typography — dino text scale */
+    '--color-typography-0': '255 255 255',
+    '--color-typography-50': '245 244 241',
+    '--color-typography-100': '229 228 225',
+    '--color-typography-200': '209 208 205',
+    '--color-typography-300': '168 167 165',
+    '--color-typography-400': '156 155 153',
+    '--color-typography-500': '156 155 153',  /* text-tertiary #9C9B99 */
+    '--color-typography-600': '122 121 119',
+    '--color-typography-700': '109 108 106',  /* text-secondary #6D6C6A */
+    '--color-typography-800': '64 63 61',
+    '--color-typography-900': '38 37 36',
+    '--color-typography-950': '26 25 24',     /* text-primary #1A1918 */
 
     /* Outline */
     '--color-outline-0': '253 254 254',
-    '--color-outline-50': '243 243 243',
-    '--color-outline-100': '230 230 230',
-    '--color-outline-200': '221 220 219',
-    '--color-outline-300': '211 211 211',
-    '--color-outline-400': '165 163 163',
-    '--color-outline-500': '140 141 141',
-    '--color-outline-600': '115 116 116',
-    '--color-outline-700': '83 82 82',
-    '--color-outline-800': '65 65 65',
-    '--color-outline-900': '39 38 36',
-    '--color-outline-950': '26 23 23',
+    '--color-outline-50': '245 244 241',
+    '--color-outline-100': '229 228 225',     /* border #E5E4E1 */
+    '--color-outline-200': '209 208 205',     /* border-strong #D1D0CD */
+    '--color-outline-300': '168 167 165',
+    '--color-outline-400': '140 141 141',
+    '--color-outline-500': '115 116 116',
+    '--color-outline-600': '83 82 82',
+    '--color-outline-700': '65 65 65',
+    '--color-outline-800': '39 38 36',
+    '--color-outline-900': '26 23 23',
+    '--color-outline-950': '10 10 10',
 
-    /* Background */
-    '--color-background-0': '255 255 255',
-    '--color-background-50': '246 246 246',
-    '--color-background-100': '242 241 241',
-    '--color-background-200': '220 219 219',
-    '--color-background-300': '213 212 212',
-    '--color-background-400': '162 163 163',
+    /* Background — dino palette */
+    '--color-background-0': '255 255 255',    /* card-bg #FFFFFF */
+    '--color-background-50': '245 244 241',   /* bg #F5F4F1 */
+    '--color-background-100': '237 236 233',
+    '--color-background-200': '229 228 225',  /* border #E5E4E1 */
+    '--color-background-300': '209 208 205',  /* border-strong #D1D0CD */
+    '--color-background-400': '168 167 165',
     '--color-background-500': '142 142 142',
     '--color-background-600': '116 116 116',
     '--color-background-700': '83 82 82',
     '--color-background-800': '65 64 64',
     '--color-background-900': '39 38 37',
-    '--color-background-950': '18 18 18',
+    '--color-background-950': '26 25 24',
 
     /* Background Special */
     '--color-background-error': '254 241 241',
     '--color-background-warning': '255 243 234',
     '--color-background-success': '237 252 242',
-    '--color-background-muted': '247 248 247',
+    '--color-background-muted': '245 244 241',
     '--color-background-info': '235 248 254',
 
-    /* Focus Ring Indicator  */
-    '--color-indicator-primary': '55 55 55',
+    /* Focus Ring Indicator */
+    '--color-indicator-primary': '61 138 90',   /* accent-green */
     '--color-indicator-info': '83 153 236',
     '--color-indicator-error': '185 28 28',
+
+    /* Dino Custom Tokens */
+    '--color-dino-mint': '184 232 208',          /* #B8E8D0 */
+    '--color-dino-mint-light': '232 248 240',    /* #E8F8F0 */
+    '--color-dino-accent-green': '61 138 90',   /* #3D8A5A */
+    '--color-dino-accent-orange': '232 160 84', /* #E8A054 */
+    '--color-dino-accent-coral': '216 149 117', /* #D89575 */
+    '--color-dino-bg': '245 244 241',            /* #F5F4F1 */
+    '--color-dino-card-bg': '255 255 255',       /* #FFFFFF */
+    '--color-dino-border': '229 228 225',        /* #E5E4E1 */
+    '--color-dino-border-strong': '209 208 205', /* #D1D0CD */
+    '--color-dino-text-primary': '26 25 24',     /* #1A1918 */
+    '--color-dino-text-secondary': '109 108 106', /* #6D6C6A */
+    '--color-dino-text-tertiary': '156 155 153', /* #9C9B99 */
+    '--color-dino-tab-inactive': '168 167 165',  /* #A8A7A5 */
   }),
   dark: vars({
-    '--color-primary-0': '166 166 166',
-    '--color-primary-50': '175 175 175',
-    '--color-primary-100': '186 186 186',
-    '--color-primary-200': '197 197 197',
-    '--color-primary-300': '212 212 212',
-    '--color-primary-400': '221 221 221',
-    '--color-primary-500': '230 230 230',
-    '--color-primary-600': '240 240 240',
-    '--color-primary-700': '250 250 250',
-    '--color-primary-800': '253 253 253',
-    '--color-primary-900': '254 249 249',
-    '--color-primary-950': '253 252 252',
+    /* Primary — accent-green (inverted for dark) */
+    '--color-primary-0': '10 25 16',
+    '--color-primary-50': '18 43 28',
+    '--color-primary-100': '25 60 40',
+    '--color-primary-200': '36 83 54',
+    '--color-primary-300': '48 110 72',
+    '--color-primary-400': '61 138 90',
+    '--color-primary-500': '80 160 112',
+    '--color-primary-600': '110 185 145',
+    '--color-primary-700': '150 210 179',
+    '--color-primary-800': '184 232 208',
+    '--color-primary-900': '220 243 231',
+    '--color-primary-950': '240 249 244',
 
-    /* Secondary  */
+    /* Secondary */
     '--color-secondary-0': '20 20 20',
     '--color-secondary-50': '23 23 23',
     '--color-secondary-100': '31 31 31',
@@ -252,19 +269,19 @@ export const config = {
     '--color-info-900': '199 235 252',
     '--color-info-950': '236 248 254',
 
-    /* Typography */
-    '--color-typography-0': '23 23 23',
-    '--color-typography-50': '38 38 39',
-    '--color-typography-100': '64 64 64',
-    '--color-typography-200': '82 82 82',
-    '--color-typography-300': '115 115 115',
+    /* Typography — dark mode */
+    '--color-typography-0': '26 25 24',
+    '--color-typography-50': '38 37 36',
+    '--color-typography-100': '64 63 61',
+    '--color-typography-200': '109 108 106',
+    '--color-typography-300': '122 121 119',
     '--color-typography-400': '140 140 140',
-    '--color-typography-500': '163 163 163',
-    '--color-typography-600': '212 212 212',
-    '--color-typography-700': '219 219 220',
-    '--color-typography-800': '229 229 229',
-    '--color-typography-900': '245 245 245',
-    '--color-typography-950': '254 254 255',
+    '--color-typography-500': '156 155 153',
+    '--color-typography-600': '184 183 181',
+    '--color-typography-700': '200 199 197',
+    '--color-typography-800': '220 219 217',
+    '--color-typography-900': '237 236 234',
+    '--color-typography-950': '245 244 241',
 
     /* Outline */
     '--color-outline-0': '26 23 23',
@@ -280,30 +297,45 @@ export const config = {
     '--color-outline-900': '243 243 243',
     '--color-outline-950': '253 254 254',
 
-    /* Background */
-    '--color-background-0': '18 18 18',
-    '--color-background-50': '39 38 37',
-    '--color-background-100': '65 64 64',
-    '--color-background-200': '83 82 82',
-    '--color-background-300': '116 116 116',
-    '--color-background-400': '142 142 142',
-    '--color-background-500': '162 163 163',
-    '--color-background-600': '213 212 212',
-    '--color-background-700': '229 228 228',
-    '--color-background-800': '242 241 241',
-    '--color-background-900': '246 246 246',
-    '--color-background-950': '255 255 255',
+    /* Background — dark mode */
+    '--color-background-0': '30 29 27',       /* dark card-bg */
+    '--color-background-50': '22 21 19',      /* dark bg */
+    '--color-background-100': '42 41 39',
+    '--color-background-200': '58 57 55',
+    '--color-background-300': '80 79 77',
+    '--color-background-400': '100 99 97',
+    '--color-background-500': '130 129 127',
+    '--color-background-600': '160 159 157',
+    '--color-background-700': '200 199 197',
+    '--color-background-800': '220 219 217',
+    '--color-background-900': '237 236 234',
+    '--color-background-950': '245 244 241',
 
     /* Background Special */
     '--color-background-error': '66 43 43',
     '--color-background-warning': '65 47 35',
     '--color-background-success': '28 43 33',
-    '--color-background-muted': '51 51 51',
+    '--color-background-muted': '42 41 39',
     '--color-background-info': '26 40 46',
 
-    /* Focus Ring Indicator  */
-    '--color-indicator-primary': '247 247 247',
+    /* Focus Ring Indicator */
+    '--color-indicator-primary': '80 160 112',
     '--color-indicator-info': '161 199 245',
     '--color-indicator-error': '232 70 69',
+
+    /* Dino Custom Tokens — dark mode */
+    '--color-dino-mint': '80 160 112',
+    '--color-dino-mint-light': '36 83 54',
+    '--color-dino-accent-green': '80 160 112',
+    '--color-dino-accent-orange': '232 160 84',
+    '--color-dino-accent-coral': '216 149 117',
+    '--color-dino-bg': '22 21 19',
+    '--color-dino-card-bg': '30 29 27',
+    '--color-dino-border': '58 57 55',
+    '--color-dino-border-strong': '80 79 77',
+    '--color-dino-text-primary': '245 244 241',
+    '--color-dino-text-secondary': '184 183 181',
+    '--color-dino-text-tertiary': '122 121 119',
+    '--color-dino-tab-inactive': '100 99 97',
   }),
 };

@@ -15,6 +15,10 @@ module.exports = {
       pattern:
         /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|error|success|warning|info|typography|outline|background|indicator)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark|primary)/,
     },
+    {
+      pattern:
+        /(bg|border|text|stroke|fill)-dino-(mint|mint-light|accent-green|accent-orange|accent-coral|bg|card-bg|border|border-strong|text-primary|text-secondary|text-tertiary|tab-inactive)/,
+    },
   ],
   theme: {
     extend: {
@@ -173,22 +177,46 @@ module.exports = {
           info: 'rgb(var(--color-indicator-info)/<alpha-value>)',
           error: 'rgb(var(--color-indicator-error)/<alpha-value>)',
         },
+        /* Dino Design System */
+        dino: {
+          mint: 'rgb(var(--color-dino-mint)/<alpha-value>)',
+          'mint-light': 'rgb(var(--color-dino-mint-light)/<alpha-value>)',
+          'accent-green': 'rgb(var(--color-dino-accent-green)/<alpha-value>)',
+          'accent-orange': 'rgb(var(--color-dino-accent-orange)/<alpha-value>)',
+          'accent-coral': 'rgb(var(--color-dino-accent-coral)/<alpha-value>)',
+          bg: 'rgb(var(--color-dino-bg)/<alpha-value>)',
+          'card-bg': 'rgb(var(--color-dino-card-bg)/<alpha-value>)',
+          border: 'rgb(var(--color-dino-border)/<alpha-value>)',
+          'border-strong': 'rgb(var(--color-dino-border-strong)/<alpha-value>)',
+          'text-primary': 'rgb(var(--color-dino-text-primary)/<alpha-value>)',
+          'text-secondary': 'rgb(var(--color-dino-text-secondary)/<alpha-value>)',
+          'text-tertiary': 'rgb(var(--color-dino-text-tertiary)/<alpha-value>)',
+          'tab-inactive': 'rgb(var(--color-dino-tab-inactive)/<alpha-value>)',
+        },
       },
       fontFamily: {
         heading: undefined,
         body: undefined,
         mono: undefined,
-        jakarta: ['var(--font-plus-jakarta-sans)'],
-        roboto: ['var(--font-roboto)'],
-        code: ['var(--font-source-code-pro)'],
-        inter: ['var(--font-inter)'],
-        'space-mono': ['var(--font-space-mono)'],
+        outfit: ['Outfit'],
       },
       fontWeight: {
         extrablack: '950',
       },
       fontSize: {
         '2xs': '10px',
+        /* Dino typography scale */
+        'dino-time': '36px',    /* 시간 표시: 36px 700 */
+        'dino-title': '22px',  /* 페이지 제목: 22px 700 */
+        'dino-section': '15px', /* 섹션 제목: 15px 700 */
+        'dino-body': '15px',    /* 본문: 15px 500 */
+        'dino-sub': '11px',    /* 보조 텍스트: 11px 500 */
+        'dino-label': '12px',  /* 섹션 레이블: 12px 600 */
+        'dino-tab': '10px',    /* 탭 레이블: 10px */
+      },
+      letterSpacing: {
+        'dino-time': '-1px',   /* 시간 표시 */
+        'dino-label': '0.4px', /* 섹션 레이블 */
       },
       boxShadow: {
         'hard-1': '-2px 2px 8px 0px rgba(38, 38, 38, 0.20)',
