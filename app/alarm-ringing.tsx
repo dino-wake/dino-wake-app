@@ -3,9 +3,9 @@ import { getAlarm, initAlarmDb } from '@/lib/db/alarms';
 import { scheduleSnoozeNotification } from '@/lib/notifications';
 import { formatDays, formatTime } from '@/types/alarm';
 import { router, useLocalSearchParams } from 'expo-router';
-import { AlarmClock, Bell } from 'lucide-react-native';
+import { AlarmClock, Bell, Hand } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
-import { Pressable } from 'react-native';
+import { Image, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, {
   Easing,
@@ -128,7 +128,7 @@ export default function AlarmRingingScreen() {
         <VStack style={{ alignItems: 'center', gap: 6, paddingHorizontal: 24, paddingTop: 16, width: '100%' }}>
           <HStack
             style={{
-              backgroundColor: '#DFF0E5',
+              backgroundColor: '#E8F8F0',
               borderRadius: 100,
               paddingHorizontal: 14,
               paddingVertical: 6,
@@ -167,58 +167,63 @@ export default function AlarmRingingScreen() {
         </VStack>
 
         {/* 알 + 리플 */}
-        <Box style={{ width: 300, height: 340, alignItems: 'center', justifyContent: 'center' }}>
-          <RippleCircle size={290} />
-          <RippleCircle size={244} />
-          <RippleCircle size={196} />
+        <Pressable onPress={handleStartMission}>
+          <Box style={{ width: 300, height: 360, alignItems: 'center', justifyContent: 'center' }}>
+            <RippleCircle size={290} />
+            <RippleCircle size={244} />
+            <RippleCircle size={196} />
 
-          <Box style={{ position: 'absolute', top: 10, width: 190, height: 246 }}>
-            <Text style={{ fontSize: 120, textAlign: 'center', lineHeight: 246 }}>🥚</Text>
+            <Image
+              source={require('@/assets/images/dino_egg.png')}
+              style={{ position: 'absolute', top: 10, left: 55, width: 190, height: 246 }}
+              resizeMode="contain"
+            />
+
+            <HStack
+              style={{
+                position: 'absolute',
+                bottom: 5,
+                backgroundColor: '#FFFFFF',
+                borderRadius: 100,
+                paddingHorizontal: 18,
+                paddingVertical: 8,
+                alignItems: 'center',
+                gap: 6,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 8,
+                elevation: 3,
+              }}
+            >
+              <Box style={{ width: 5, height: 5, borderRadius: 2.5, backgroundColor: '#B8E8D0' }} />
+              <Box style={{ width: 5, height: 5, borderRadius: 2.5, backgroundColor: '#B8E8D0' }} />
+              <Box style={{ width: 5, height: 5, borderRadius: 2.5, backgroundColor: '#E8F8F0' }} />
+              <Text style={{ fontSize: 13, fontFamily: 'Outfit_600SemiBold', color: Colors.light.text }}>
+                알람이 울리고 있어요!
+              </Text>
+            </HStack>
           </Box>
+        </Pressable>
 
-          <HStack
+        {/* 힌트 섹션 */}
+        <VStack style={{ alignItems: 'center', gap: 16, paddingHorizontal: 24, width: '100%' }}>
+          <Hand size={28} color="#B8E8D0" />
+          <Text
             style={{
-              position: 'absolute',
-              bottom: 5,
-              backgroundColor: '#FFFFFF',
-              borderRadius: 100,
-              paddingHorizontal: 18,
-              paddingVertical: 8,
-              alignItems: 'center',
-              gap: 6,
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 8,
-              elevation: 3,
+              fontSize: 24,
+              fontFamily: 'Outfit_500Medium',
+              color: '#6D6C6A',
+              textAlign: 'center',
+              lineHeight: 24 * 1.3,
             }}
           >
-            <Box style={{ width: 5, height: 5, borderRadius: 2.5, backgroundColor: '#B8DFBE' }} />
-            <Box style={{ width: 5, height: 5, borderRadius: 2.5, backgroundColor: '#B8DFBE' }} />
-            <Box style={{ width: 5, height: 5, borderRadius: 2.5, backgroundColor: '#DFF0E5' }} />
-            <Text style={{ fontSize: 13, fontFamily: 'Outfit_600SemiBold', color: Colors.light.text }}>
-              알람이 울리고 있어요!
-            </Text>
-          </HStack>
-        </Box>
-
-        {/* 기상 미션 시작 버튼 */}
-        <Pressable
-          onPress={handleStartMission}
-          style={{
-            marginHorizontal: 24,
-            backgroundColor: '#3D8A5A',
-            height: 54,
-            borderRadius: 18,
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '80%',
-          }}
-        >
-          <Text style={{ color: '#FFFFFF', fontSize: 17, fontFamily: 'Outfit_700Bold' }}>
-            기상 미션 시작 🦕
+            알을 쓰다듬어서{'\n'}공룡을 깨워요!
           </Text>
-        </Pressable>
+        </VStack>
+
+        {/* 스페이서 */}
+        <Box style={{ flex: 1 }} />
 
         {/* 스누즈 버튼 */}
         {canSnooze ? (
@@ -230,8 +235,7 @@ export default function AlarmRingingScreen() {
               justifyContent: 'center',
               gap: 6,
               paddingHorizontal: 24,
-              paddingTop: 16,
-              paddingBottom: 24,
+              paddingBottom: 40,
             }}
           >
             <AlarmClock size={14} color={Colors.light.icon} />
@@ -242,7 +246,7 @@ export default function AlarmRingingScreen() {
             </Text>
           </Pressable>
         ) : (
-          <Box style={{ paddingBottom: 24, paddingTop: 16 }}>
+          <Box style={{ paddingBottom: 40 }}>
             <Text style={{ fontSize: 13, fontFamily: 'Outfit_400Regular', color: Colors.light.icon }}>
               스누즈 횟수를 모두 사용했어요
             </Text>

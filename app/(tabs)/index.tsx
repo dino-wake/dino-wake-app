@@ -11,16 +11,23 @@ import { ScrollView } from "@/components/ui/scroll-view";
 import { Text } from "@/components/ui/text";
 import { Colors } from "@/constants/theme";
 import { useAlarms } from "@/hooks/use-alarms";
-import { type Alarm, formatDays, formatTime } from "@/types/alarm";
+import { type Alarm, formatDays, formatTime, getNextAlarmLabel } from "@/types/alarm";
 import { router } from "expo-router";
 import { MapIcon, Plus } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
 	const { alarms, addAlarm, updateAlarm, toggleAlarm, deleteAlarm } = useAlarms();
 	const [showAdd, setShowAdd] = useState(false);
 	const [editTarget, setEditTarget] = useState<Alarm | null>(null);
+	const [nextAlarmLabel, setNextAlarmLabel] = useState('');
+
+	useEffect(() => {
+		setNextAlarmLabel(getNextAlarmLabel(alarms));
+		const id = setInterval(() => setNextAlarmLabel(getNextAlarmLabel(alarms)), 60000);
+		return () => clearInterval(id);
+	}, [alarms]);
 
 	return (
 		<SafeAreaView className="flex-1 bg-dino-bg">
@@ -33,11 +40,11 @@ export default function HomeScreen() {
 					<TimeDisplay time="17:30" />
 				</Box>
 
-				<DinoEggSection />
+				<DinoEggSection nextAlarmLabel={nextAlarmLabel} />
 
 				<BriefingSection />
 
-				<AdBanner title="공룡과 함께 더 건강한 아침을 시작해보세요" />
+				<AdBanner title={"디노 알람과 함께하는\n아침의 시작 ☀️"} />
 
 				<Box className="gap-4">
 					{alarms.map((alarm) => (

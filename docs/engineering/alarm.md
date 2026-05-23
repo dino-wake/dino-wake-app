@@ -87,10 +87,11 @@ pnpm android    # dev client 빌드 필요
 ```
 알람 울림 (alarm-ringing)
   ├─ [5분 더] → scheduleSnoozeNotification → router.back()  (최대 3회)
-  └─ [기상 미션 시작] → router.replace('/emotion-dial', { alarmId })
+  └─ [알을 쓰다듬기(탭)] → router.replace('/emotion-dial', { alarmId })
 
 무드 선택 (emotion-dial)
-  └─ [기상 완료] → router.replace('/wake-complete', { mood, alarmId })
+  ├─ [다이얼 선택 후 확인] → router.replace('/wake-complete', { mood, alarmId })
+  └─ [나중에 기록할래요] → router.back()
 
 기상 완료 (wake-complete)
   └─ [홈으로] → router.replace('/(tabs)')
@@ -99,6 +100,51 @@ pnpm android    # dev client 빌드 필요
 - `alarm-ringing`과 `wake-complete`는 `presentation: 'fullScreenModal'`로 열린다.
 - `alarmId`를 각 화면에 params로 전달해 흐름을 추적한다.
 - `emotion-dial`은 알람 플로우(alarmId 있음)와 standalone(alarmId 없음)을 모두 지원한다.
+
+---
+
+## alarm-ringing UI
+
+- 알람 메타: 라벨 배지(`#E8F8F0`) + 시간(86px) + 요일
+- 알 이미지(`dino_egg.png`)를 중앙 리플 애니메이션 위에 배치, 탭 시 기상 플로우 진입
+- 힌트 섹션: `Hand` 아이콘 + "알을 쓰다듬어서 공룡을 깨워요!" 텍스트
+- 스누즈: 최대 3회, 5분 간격 (`scheduleSnoozeNotification`)
+
+---
+
+## emotion-dial UI
+
+### 다이얼 동작
+
+- 초기 위치: 상쾌해요(0°, 12시)
+- 드래그 or 레이블 탭 → 가장 근처 감정으로 스냅 (햅틱 피드백)
+- 아크: **0°(12시)에서 현재 선택 각도까지** 가변 길이 (mint `#B8E8D0`)
+- 편안해요(300°) → 상쾌해요 이동 시 target=360 (아크가 완전한 원으로 채워짐)
+
+### SVG 구성
+
+| 요소 | 설명 |
+|------|------|
+| 배경 링 | 359.9° 도넛, `#E8E8E4` |
+| 진행 아크 | `buildVariableArc(angle)`, 0°~angle, `#B8E8D0` |
+| 내부 흰 원 | `r = INNER_R - 2` |
+| 노브 | `KNOB_R = (OUTER_R + INNER_R) / 2` 위치, Reanimated 스프링 |
+
+### 치수
+
+```
+DIAL_SIZE = 340   (dialWrap)
+OUTER_R   = 135   (270/2)
+INNER_R   = 113   (135 × 0.84)
+KNOB_R    = 124   (링 중간선)
+```
+
+### 애니메이션
+
+- `useSharedValue(angle)` + `withSpring({ damping: 30, stiffness: 200 })` (임계감쇠, 바운스 없음)
+- `useAnimatedProps` → `AnimatedPath.d` (아크 SVG 경로 실시간 업데이트)
+- `useAnimatedStyle` → 노브 `left/top` 위치
+- PanResponder로 드래그 각도 계산 → `selectEmotionRef.current(nearestIdx)`
 
 ---
 

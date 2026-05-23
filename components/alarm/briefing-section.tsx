@@ -10,7 +10,7 @@ import { TagActive, TagInactive } from './tag';
 export function BriefingSection() {
   return (
     <Box
-      className="rounded-2xl bg-background-0 p-4"
+      className="rounded-2xl bg-background-0 px-4 py-[14px]"
       style={{
         shadowColor: Colors.light.shadowNeutral,
         shadowOffset: { width: 0, height: 2 },
