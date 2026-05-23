@@ -29,7 +29,7 @@ export default function HomeScreen() {
 	}, [alarms]);
 
 	return (
-		<SafeAreaView className="flex-1 bg-dino-bg">
+		<SafeAreaView className="flex-1 bg-dino-bg" edges={['top']}>
 			<ScrollView
 				className="flex-1"
 				contentContainerClassName="px-6 pt-16 pb-10 gap-5"

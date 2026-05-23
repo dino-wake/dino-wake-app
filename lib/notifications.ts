@@ -1,6 +1,9 @@
 import * as Notifications from 'expo-notifications';
-import { Platform } from 'react-native';
+import { Linking, PermissionsAndroid, Platform } from 'react-native';
 import { Alarm } from '@/types/alarm';
+
+const ANDROID_PACKAGE = 'com.dinowake.dinowakeapp';
+const ALARM_CHANNEL_ID = 'alarms-v2';
 
 // ─── iOS: expo-notifications foreground handler ────────────────────────────────
 
@@ -34,7 +37,7 @@ function nextAlarmDate(hour: number, minute: number): Date {
   const now = new Date();
   const d = new Date();
   d.setHours(hour, minute, 0, 0);
-  if (d <= now) d.setDate(d.getDate() + 1);
+  if (d < now) d.setDate(d.getDate() + 1);
   return d;
 }
 
@@ -46,7 +49,7 @@ function nextAlarmDateForDay(hour: number, minute: number, appDay: number): Date
 
   const currentJsDay = d.getDay();
   let daysUntil = (jsDay - currentJsDay + 7) % 7;
-  if (daysUntil === 0 && d <= now) daysUntil = 7;
+  if (daysUntil === 0 && d < now) daysUntil = 7;
   d.setDate(d.getDate() + daysUntil);
   return d;
 }
@@ -66,15 +69,33 @@ export async function requestNotificationPermission(): Promise<boolean> {
       sound: 'default',
     });
 
-    // notifee 채널은 scheduleAlarmNotifications 호출 시 생성
+    // Android 13+ (API 33+): POST_NOTIFICATIONS 런타임 권한 요청
+    if (Platform.Version >= 33) {
+      const result = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      );
+      return result === PermissionsAndroid.RESULTS.GRANTED;
+    }
+    return true;
   }
 
   const { status, canAskAgain } = await Notifications.getPermissionsAsync();
   if (status === 'granted') return true;
   if (!canAskAgain) return false;
 
-  const { status: newStatus } = await Notifications.requestPermissionsAsync();
+  const { status: newStatus } = await Notifications.requestPermissionsAsync({
+    ios: { allowSound: true },
+  });
   return newStatus === 'granted';
+}
+
+// Android 14+(API 34+): USE_FULL_SCREEN_INTENT 설정 화면으로 이동
+// 알람이 다른 앱 위에서 자동으로 열리려면 사용자가 직접 허용해야 함
+export async function openFullScreenIntentSettings(): Promise<void> {
+  if (Platform.OS !== 'android' || Platform.Version < 34) return;
+  await Linking.sendIntent('android.settings.MANAGE_APP_USE_FULL_SCREEN_INTENT', [
+    { key: 'android.provider.extra.APP_PACKAGE', value: ANDROID_PACKAGE },
+  ]);
 }
 
 // ─── Android: notifee 스케줄링 ─────────────────────────────────────────────────
@@ -84,12 +105,13 @@ async function scheduleAlarmNotificationsAndroid(alarm: Alarm): Promise<string[]
   const { TriggerType, AndroidCategory, AndroidImportance } = await import('@notifee/react-native');
 
   await notifee.createChannel({
-    id: 'alarms',
+    id: ALARM_CHANNEL_ID,
     name: '알람',
     importance: AndroidImportance.HIGH,
     vibration: true,
     vibrationPattern: [100, 500, 100, 500],
     sound: 'default',
+    bypassDnd: true,
   });
 
   const notifContent = {
@@ -97,10 +119,10 @@ async function scheduleAlarmNotificationsAndroid(alarm: Alarm): Promise<string[]
     body: '알람이 울리고 있어요! 공룡을 깨워주세요 🦕',
     data: { alarmId: alarm.id },
     android: {
-      channelId: 'alarms',
+      channelId: ALARM_CHANNEL_ID,
       category: AndroidCategory.ALARM,
       importance: AndroidImportance.HIGH,
-      fullScreenAction: { id: 'default' },
+      fullScreenAction: { id: 'default', launchActivity: `${ANDROID_PACKAGE}.MainActivity` },
       pressAction: { id: 'default' },
       smallIcon: 'notification_icon',
     },
@@ -207,10 +229,10 @@ export async function scheduleSnoozeNotification(alarm: Alarm): Promise<string> 
         body: '5분이 지났어요! 이제 일어날 시간이에요 🦕',
         data: { alarmId: alarm.id },
         android: {
-          channelId: 'alarms',
+          channelId: ALARM_CHANNEL_ID,
           category: AndroidCategory.ALARM,
           importance: AndroidImportance.HIGH,
-          fullScreenAction: { id: 'default' },
+          fullScreenAction: { id: 'default', launchActivity: `${ANDROID_PACKAGE}.MainActivity` },
           pressAction: { id: 'default' },
           smallIcon: 'notification_icon',
         },

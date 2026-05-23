@@ -119,7 +119,7 @@ export default function SettingsScreen() {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F5F4F1' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#F5F4F1' }} edges={['top']}>
       <ScrollView showsVerticalScrollIndicator={false}>
 
         {/* 헤더 */}

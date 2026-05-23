@@ -5,9 +5,13 @@ import { Platform } from 'react-native';
 // 앱이 완전히 종료된 상태에서 알림 상호작용 처리
 if (Platform.OS === 'android') {
   const notifee = require('@notifee/react-native').default;
-  notifee.onBackgroundEvent(async () => {
-    // fullScreenAction이 앱 실행을 처리하므로 별도 처리 불필요
-    // 향후 스누즈 액션 처리 시 여기에 추가
+  const { EventType } = require('@notifee/react-native');
+
+  notifee.onBackgroundEvent(async ({ type }) => {
+    // DELIVERED: fullScreenAction이 MainActivity를 실행 → app/_layout.tsx의 getInitialNotification()이 라우팅 처리
+    // PRESS: 사용자가 알림 배너를 탭 → fullScreenAction이 앱 실행 → getInitialNotification()이 처리
+    // DISMISSED: 사용자가 알림을 닫음 → 별도 처리 없음
+    if (type === EventType.DISMISSED) return;
   });
 }
 

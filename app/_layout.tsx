@@ -58,7 +58,7 @@ export default function RootLayout() {
     let unsubscribe: (() => void) | undefined;
     import('@notifee/react-native').then(({ default: notifee, EventType }) => {
       unsubscribe = notifee.onForegroundEvent(({ type, detail }) => {
-        if (type === EventType.DELIVERED) {
+        if (type === EventType.DELIVERED || type === EventType.PRESS) {
           const alarmId = detail.notification?.data?.alarmId as string | undefined;
           if (alarmId) {
             router.push({ pathname: '/alarm-ringing', params: { alarmId } });
