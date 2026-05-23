@@ -6,21 +6,34 @@
 
 ## 기술 스택
 
-- **Runtime**: Expo 55, React Native 0.83, React 19
+- **Runtime**: Expo SDK 54, React Native 0.81.5, React 19
 - **언어**: TypeScript (strict)
 - **라우팅**: Expo Router (파일 기반, Next.js 방식)
 - **애니메이션**: React Native Reanimated 4
+- **로컬 DB**: expo-sqlite v16 (동기 API — `openDatabaseSync`)
+- **로컬 알림**: expo-notifications v0.32
 - **패키지 매니저**: pnpm
 
 ## 프로젝트 구조
 
 ```
 app/              # 파일 기반 라우팅 (Expo Router)
-  _layout.tsx     # 루트 레이아웃
+  _layout.tsx     # 루트 레이아웃 (알림 핸들러 포함)
   (tabs)/         # 탭 네비게이션 그룹
+  alarm-ringing.tsx  # WAKE-001 알람 울림
+  emotion-dial.tsx   # WAKE-S1 무드 체크
+  wake-complete.tsx  # WAKE-END 기상 완료
 components/       # 재사용 UI 컴포넌트
+  alarm/          # 알람 관련 컴포넌트
   ui/             # 원자적 UI 컴포넌트
 hooks/            # 커스텀 훅
+  use-alarms.ts   # 알람 CRUD + 알림 스케줄 통합 훅
+lib/
+  db/
+    alarms.ts     # SQLite CRUD
+  notifications.ts  # expo-notifications 스케줄링
+types/
+  alarm.ts        # Alarm 타입 정의
 constants/
   theme.ts        # Colors, Fonts 상수
 ```
@@ -64,6 +77,7 @@ constants/
 | 문서 | 경로 | 설명 |
 |------|------|------|
 | HTTP 요청 규칙 | [docs/hooks/request-http.md](docs/hooks/request-http.md) | React Query를 통한 fetch 함수, query/mutation 훅 작성 규칙 |
+| 알람 구현 규칙 | [docs/engineering/alarm.md](docs/engineering/alarm.md) | SQLite 스키마, 알림 스케줄링, 기상 플로우 구조 |
 
 ### 기획
 | 문서 | 경로 | 설명 |

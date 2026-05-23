@@ -11,17 +11,19 @@ import {
   Outfit_700Bold,
   useFonts,
 } from "@expo-google-fonts/outfit";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import "react-native-reanimated";
+import * as Notifications from "expo-notifications";
 
 import { useColorScheme } from "nativewind";
 
 import { useAppStateRefetch } from "@/hooks/use-app-state-refetch";
 import { useOnlineManager } from "@/hooks/use-online-manager";
 import { queryClient } from "@/lib/query-client";
+import { requestNotificationPermission } from "@/lib/notifications";
 
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "@/global.css";
@@ -44,6 +46,37 @@ export default function RootLayout() {
   useOnlineManager();
   useAppStateRefetch();
 
+  // 알림 권한 요청
+  useEffect(() => {
+    requestNotificationPermission();
+  }, []);
+
+  // 포그라운드에서 알림 수신 시 알람 울림 화면으로 이동
+  useEffect(() => {
+    const sub = Notifications.addNotificationReceivedListener((notification) => {
+      const alarmId = notification.request.content.data?.alarmId as string | undefined;
+      if (alarmId) {
+        router.push({ pathname: "/alarm-ringing", params: { alarmId } });
+      }
+    });
+    return () => sub.remove();
+  }, []);
+
+  // 백그라운드/종료 상태에서 알림 탭 시 알람 울림 화면으로 이동
+  const lastResponse = Notifications.useLastNotificationResponse();
+  const lastResponseRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!lastResponse) return;
+    const requestId = lastResponse.notification.request.identifier;
+    if (lastResponseRef.current === requestId) return;
+    lastResponseRef.current = requestId;
+
+    const alarmId = lastResponse.notification.request.content.data?.alarmId as string | undefined;
+    if (alarmId) {
+      router.push({ pathname: "/alarm-ringing", params: { alarmId } });
+    }
+  }, [lastResponse]);
+
   useEffect(() => {
     if (fontsLoaded) SplashScreen.hideAsync();
   }, [fontsLoaded]);
@@ -58,7 +91,8 @@ export default function RootLayout() {
         >
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="alarm-ringing" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
+            <Stack.Screen name="alarm-ringing" options={{ headerShown: false, presentation: "fullScreenModal" }} />
+            <Stack.Screen name="wake-complete" options={{ headerShown: false, presentation: "fullScreenModal" }} />
             <Stack.Screen name="auth/login" options={{ headerShown: false }} />
             <Stack.Screen name="auth/signup" options={{ headerShown: false }} />
             <Stack.Screen name="auth/forgot-password" options={{ headerShown: false }} />

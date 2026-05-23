@@ -1,21 +1,34 @@
 import { Colors } from '@/constants/theme';
-import { AlarmClock, Bell, Hand } from 'lucide-react-native';
-import { useEffect } from 'react';
-import { View, Pressable, Image } from 'react-native';
+import { getAlarm, initAlarmDb } from '@/lib/db/alarms';
+import { scheduleSnoozeNotification } from '@/lib/notifications';
+import { formatDays, formatTime } from '@/types/alarm';
+import { router, useLocalSearchParams } from 'expo-router';
+import { AlarmClock, Bell } from 'lucide-react-native';
+import { useEffect, useState } from 'react';
+import { Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, {
+  Easing,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
-  Easing,
 } from 'react-native-reanimated';
-import { Text } from '@/components/ui/text';
 import { Box } from '@/components/ui/box';
 import { HStack } from '@/components/ui/hstack';
+import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 
-function RippleCircle({ delay, size }: { delay: number; size: number }) {
+type AlarmInfo = {
+  id: string;
+  label: string;
+  timeStr: string;
+  daysStr: string;
+  snoozeEnabled: boolean;
+  snoozeCount: number;
+};
+
+function RippleCircle({ size }: { size: number }) {
   const opacity = useSharedValue(0.5);
   const scale = useSharedValue(0.7);
 
@@ -23,12 +36,12 @@ function RippleCircle({ delay, size }: { delay: number; size: number }) {
     opacity.value = withRepeat(
       withTiming(0, { duration: 2000, easing: Easing.out(Easing.ease) }),
       -1,
-      false
+      false,
     );
     scale.value = withRepeat(
       withTiming(1, { duration: 2000, easing: Easing.out(Easing.ease) }),
       -1,
-      false
+      false,
     );
   }, []);
 
@@ -54,14 +67,65 @@ function RippleCircle({ delay, size }: { delay: number; size: number }) {
   );
 }
 
+const MAX_SNOOZE = 3;
+
 export default function AlarmRingingScreen() {
+  const { alarmId } = useLocalSearchParams<{ alarmId?: string }>();
+  const [alarm, setAlarm] = useState<AlarmInfo | null>(null);
+  const [snoozeCount, setSnoozeCount] = useState(0);
+
+  useEffect(() => {
+    initAlarmDb();
+    if (alarmId) {
+      const found = getAlarm(alarmId);
+      if (found) {
+        setAlarm({
+          id: found.id,
+          label: found.label,
+          timeStr: formatTime(found.hour, found.minute),
+          daysStr: formatDays(found.days),
+          snoozeEnabled: found.snooze,
+          snoozeCount: 0,
+        });
+      }
+    } else {
+      // 사이트맵 등에서 직접 접근 시 기본값 표시
+      setAlarm({
+        id: '',
+        label: '기상',
+        timeStr: '07:00',
+        daysStr: '주중',
+        snoozeEnabled: true,
+        snoozeCount: 0,
+      });
+    }
+  }, [alarmId]);
+
+  async function handleSnooze() {
+    if (!alarm || snoozeCount >= MAX_SNOOZE) return;
+    if (alarm.id) {
+      const found = getAlarm(alarm.id);
+      if (found) await scheduleSnoozeNotification(found);
+    }
+    setSnoozeCount((c) => c + 1);
+    router.back();
+  }
+
+  function handleStartMission() {
+    router.replace({
+      pathname: '/emotion-dial',
+      params: { alarmId: alarm?.id ?? '' },
+    });
+  }
+
+  const canSnooze = alarm?.snoozeEnabled && snoozeCount < MAX_SNOOZE;
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F5F4F1' }}>
       <VStack style={{ flex: 1, alignItems: 'center' }}>
 
         {/* 알람 메타 */}
         <VStack style={{ alignItems: 'center', gap: 6, paddingHorizontal: 24, paddingTop: 16, width: '100%' }}>
-          {/* 알람 배지 */}
           <HStack
             style={{
               backgroundColor: '#DFF0E5',
@@ -74,11 +138,10 @@ export default function AlarmRingingScreen() {
           >
             <Bell size={13} color="#3D8A5A" />
             <Text style={{ fontSize: 12, fontFamily: 'Outfit_600SemiBold', color: '#3D8A5A' }}>
-              아침 기상
+              {alarm?.label ?? '알람'}
             </Text>
           </HStack>
 
-          {/* 시간 */}
           <Text
             style={{
               fontSize: 86,
@@ -88,10 +151,9 @@ export default function AlarmRingingScreen() {
               lineHeight: 96,
             }}
           >
-            07:00
+            {alarm?.timeStr ?? '--:--'}
           </Text>
 
-          {/* 요일 */}
           <Text
             style={{
               fontSize: 13,
@@ -100,30 +162,20 @@ export default function AlarmRingingScreen() {
               letterSpacing: 1,
             }}
           >
-            월  화  수  목  금
+            {alarm?.daysStr ?? ''}
           </Text>
         </VStack>
 
         {/* 알 + 리플 */}
-        <Box style={{ width: 300, height: 360, alignItems: 'center', justifyContent: 'center' }}>
-          {/* 리플 원 */}
-          <RippleCircle delay={0} size={290} />
-          <RippleCircle delay={400} size={244} />
-          <RippleCircle delay={800} size={196} />
+        <Box style={{ width: 300, height: 340, alignItems: 'center', justifyContent: 'center' }}>
+          <RippleCircle size={290} />
+          <RippleCircle size={244} />
+          <RippleCircle size={196} />
 
-          {/* 공룡 알 이미지 */}
-          <Box
-            style={{
-              position: 'absolute',
-              top: 10,
-              width: 190,
-              height: 246,
-            }}
-          >
+          <Box style={{ position: 'absolute', top: 10, width: 190, height: 246 }}>
             <Text style={{ fontSize: 120, textAlign: 'center', lineHeight: 246 }}>🥚</Text>
           </Box>
 
-          {/* 흔들기 라벨 */}
           <HStack
             style={{
               position: 'absolute',
@@ -150,38 +202,52 @@ export default function AlarmRingingScreen() {
           </HStack>
         </Box>
 
-        {/* 힌트 */}
-        <VStack style={{ alignItems: 'center', gap: 16, paddingHorizontal: 24, flex: 1, justifyContent: 'center' }}>
-          <Hand size={28} color="#B8DFBE" />
-          <Text
-            style={{
-              fontSize: 24,
-              fontFamily: 'Outfit_500Medium',
-              color: Colors.light.icon,
-              lineHeight: 24 * 1.3,
-              textAlign: 'center',
-            }}
-          >
-            {'알을 쓰다듬어서\n공룡을 깨워요!'}
-          </Text>
-        </VStack>
-
-        {/* 스누즈 버튼 */}
+        {/* 기상 미션 시작 버튼 */}
         <Pressable
+          onPress={handleStartMission}
           style={{
-            flexDirection: 'row',
+            marginHorizontal: 24,
+            backgroundColor: '#3D8A5A',
+            height: 54,
+            borderRadius: 18,
             alignItems: 'center',
             justifyContent: 'center',
-            gap: 6,
-            paddingHorizontal: 24,
-            paddingBottom: 40,
+            width: '80%',
           }}
         >
-          <AlarmClock size={14} color={Colors.light.icon} />
-          <Text style={{ fontSize: 14, fontFamily: 'Outfit_500Medium', color: Colors.light.icon }}>
-            5분 뒤 다시 알림
+          <Text style={{ color: '#FFFFFF', fontSize: 17, fontFamily: 'Outfit_700Bold' }}>
+            기상 미션 시작 🦕
           </Text>
         </Pressable>
+
+        {/* 스누즈 버튼 */}
+        {canSnooze ? (
+          <Pressable
+            onPress={handleSnooze}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6,
+              paddingHorizontal: 24,
+              paddingTop: 16,
+              paddingBottom: 24,
+            }}
+          >
+            <AlarmClock size={14} color={Colors.light.icon} />
+            <Text style={{ fontSize: 14, fontFamily: 'Outfit_500Medium', color: Colors.light.icon }}>
+              {snoozeCount > 0
+                ? `5분 뒤 다시 알림 (${MAX_SNOOZE - snoozeCount}회 남음)`
+                : '5분 뒤 다시 알림'}
+            </Text>
+          </Pressable>
+        ) : (
+          <Box style={{ paddingBottom: 24, paddingTop: 16 }}>
+            <Text style={{ fontSize: 13, fontFamily: 'Outfit_400Regular', color: Colors.light.icon }}>
+              스누즈 횟수를 모두 사용했어요
+            </Text>
+          </Box>
+        )}
 
       </VStack>
     </SafeAreaView>

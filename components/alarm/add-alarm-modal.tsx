@@ -18,7 +18,7 @@ import {
 type Props = {
   visible: boolean;
   onClose: () => void;
-  onSave: (alarm: Omit<Alarm, 'id'>) => void;
+  onSave: (alarm: Omit<Alarm, 'id' | 'notificationIds'>) => void;
 };
 
 export function AddAlarmModal({ visible, onClose, onSave }: Props) {

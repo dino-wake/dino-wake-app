@@ -8,7 +8,7 @@ import { Box } from '@/components/ui/box';
 import { HStack } from '@/components/ui/hstack';
 import { VStack } from '@/components/ui/vstack';
 import Svg, { Circle, Path } from 'react-native-svg';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 const ACCENT_GREEN = '#3D8A5A';
 const MINT_LIGHT = '#DFF0E5';
@@ -91,11 +91,20 @@ function EmotionLabel({
 }
 
 export default function EmotionDialScreen() {
+  const { alarmId } = useLocalSearchParams<{ alarmId?: string }>();
   const [selected, setSelected] = useState<Emotion>(EMOTIONS[4]); // 피곤해요
 
   const arcEnd = selected.angle;
   const arcStart = arcEnd - 120;
   const knobPos = pt(CX, CY, KNOB_R, arcEnd);
+
+  function handleConfirm() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    router.replace({
+      pathname: '/wake-complete' as any,
+      params: { mood: selected.label, alarmId: alarmId ?? '' },
+    });
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
@@ -205,26 +214,43 @@ export default function EmotionDialScreen() {
           </View>
         </View>
 
-        {/* Skip Button */}
-        <HStack
-          style={{
-            height: 48,
-            borderRadius: 100,
-            borderWidth: 1,
-            borderColor: Colors.light.border,
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 6,
-          }}
-        >
+        {/* 확인 버튼 (알람 플로우) / 스킵 버튼 (standalone) */}
+        {alarmId ? (
           <Pressable
-            onPress={() => router.back()}
-            style={{ flex: 1, height: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+            onPress={handleConfirm}
+            style={{
+              height: 54,
+              borderRadius: 18,
+              backgroundColor: '#3D8A5A',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            <Clock3 size={16} color={Colors.light.icon} />
-            <Text style={{ fontSize: 14, fontFamily: 'Outfit_500Medium', color: Colors.light.icon }}>나중에 기록할래요</Text>
+            <Text style={{ fontSize: 17, fontFamily: 'Outfit_700Bold', color: '#FFFFFF' }}>
+              기상 완료 🎉
+            </Text>
           </Pressable>
-        </HStack>
+        ) : (
+          <HStack
+            style={{
+              height: 48,
+              borderRadius: 100,
+              borderWidth: 1,
+              borderColor: Colors.light.border,
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6,
+            }}
+          >
+            <Pressable
+              onPress={() => router.back()}
+              style={{ flex: 1, height: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+            >
+              <Clock3 size={16} color={Colors.light.icon} />
+              <Text style={{ fontSize: 14, fontFamily: 'Outfit_500Medium', color: Colors.light.icon }}>나중에 기록할래요</Text>
+            </Pressable>
+          </HStack>
+        )}
       </VStack>
     </SafeAreaView>
   );

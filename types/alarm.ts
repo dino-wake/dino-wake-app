@@ -8,6 +8,7 @@ export type Alarm = {
   enabled: boolean;
   sound: boolean;
   snooze: boolean;
+  notificationIds: string[];
 };
 
 export const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];

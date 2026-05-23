@@ -42,7 +42,16 @@
         }
       ],
       "expo-font",
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-sqlite",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#3D8A5A",
+          "sounds": []
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

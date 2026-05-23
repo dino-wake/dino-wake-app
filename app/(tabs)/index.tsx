@@ -10,60 +10,17 @@ import { Pressable } from "@/components/ui/pressable";
 import { ScrollView } from "@/components/ui/scroll-view";
 import { Text } from "@/components/ui/text";
 import { Colors } from "@/constants/theme";
+import { useAlarms } from "@/hooks/use-alarms";
 import { type Alarm, formatDays, formatTime } from "@/types/alarm";
 import { router } from "expo-router";
 import { MapIcon, Plus } from "lucide-react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const INITIAL_ALARMS: Alarm[] = [
-	{
-		id: "1",
-		hour: 7,
-		minute: 0,
-		label: "기상",
-		memo: "",
-		days: [0, 1, 2, 3, 4],
-		enabled: true,
-		sound: true,
-		snooze: false,
-	},
-	{
-		id: "2",
-		hour: 9,
-		minute: 30,
-		label: "주말",
-		memo: "",
-		days: [5, 6],
-		enabled: false,
-		sound: true,
-		snooze: true,
-	},
-];
-
 export default function HomeScreen() {
-	const [alarms, setAlarms] = useState<Alarm[]>(INITIAL_ALARMS);
+	const { alarms, addAlarm, updateAlarm, toggleAlarm, deleteAlarm } = useAlarms();
 	const [showAdd, setShowAdd] = useState(false);
 	const [editTarget, setEditTarget] = useState<Alarm | null>(null);
-
-	function handleToggle(id: string, value: boolean) {
-		setAlarms((prev) =>
-			prev.map((a) => (a.id === id ? { ...a, enabled: value } : a)),
-		);
-	}
-
-	function handleAdd(data: Omit<Alarm, "id">) {
-		const id = Date.now().toString();
-		setAlarms((prev) => [...prev, { ...data, id }]);
-	}
-
-	function handleEdit(updated: Alarm) {
-		setAlarms((prev) => prev.map((a) => (a.id === updated.id ? updated : a)));
-	}
-
-	function handleDelete(id: string) {
-		setAlarms((prev) => prev.filter((a) => a.id !== id));
-	}
 
 	return (
 		<SafeAreaView className="flex-1 bg-dino-bg">
@@ -90,7 +47,7 @@ export default function HomeScreen() {
 							label={alarm.label}
 							days={formatDays(alarm.days)}
 							enabled={alarm.enabled}
-							onToggle={(value) => handleToggle(alarm.id, value)}
+							onToggle={(value) => toggleAlarm(alarm.id, value)}
 							onPress={() => setEditTarget(alarm)}
 						/>
 					))}
@@ -135,15 +92,15 @@ export default function HomeScreen() {
 			<AddAlarmModal
 				visible={showAdd}
 				onClose={() => setShowAdd(false)}
-				onSave={handleAdd}
+				onSave={addAlarm}
 			/>
 
 			<EditAlarmModal
 				visible={editTarget !== null}
 				alarm={editTarget}
 				onClose={() => setEditTarget(null)}
-				onSave={handleEdit}
-				onDelete={handleDelete}
+				onSave={updateAlarm}
+				onDelete={deleteAlarm}
 			/>
 		</SafeAreaView>
 	);
