@@ -2,7 +2,8 @@ import { Colors } from '@/constants/theme';
 import { Alarm } from '@/types/alarm';
 import { Trash2, X } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
-import { Modal, Pressable, ScrollView, View } from 'react-native';
+import { Modal, Pressable, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Box } from '@/components/ui/box';
 import { HStack } from '@/components/ui/hstack';
@@ -28,7 +29,6 @@ export function EditAlarmModal({ visible, alarm, onClose, onSave, onDelete }: Pr
   const [minute, setMinute] = useState(0);
   const [days, setDays] = useState<number[]>([0, 1, 2, 3, 4]);
   const [label, setLabel] = useState('');
-  const [memo, setMemo] = useState('');
   const [sound, setSound] = useState(true);
   const [snooze, setSnooze] = useState(false);
 
@@ -38,7 +38,6 @@ export function EditAlarmModal({ visible, alarm, onClose, onSave, onDelete }: Pr
       setMinute(alarm.minute);
       setDays(alarm.days);
       setLabel(alarm.label);
-      setMemo(alarm.memo);
       setSound(alarm.sound);
       setSnooze(alarm.snooze);
     }
@@ -46,7 +45,7 @@ export function EditAlarmModal({ visible, alarm, onClose, onSave, onDelete }: Pr
 
   function handleSave() {
     if (!alarm) return;
-    onSave({ ...alarm, hour, minute, days, label: label || '알람', memo, sound, snooze });
+    onSave({ ...alarm, hour, minute, days, label: label || '알람', sound, snooze });
     onClose();
   }
 
@@ -111,21 +110,12 @@ export function EditAlarmModal({ visible, alarm, onClose, onSave, onDelete }: Pr
 
               <DaySelector selectedDays={days} onChange={setDays} />
 
-              <VStack space="sm">
-                <InputCard
-                  label="알람 이름"
-                  placeholder="예: 아침 운동"
-                  value={label}
-                  onChangeText={setLabel}
-                />
-                <InputCard
-                  label="준비물 및 일정 메모"
-                  placeholder="내일 챙겨야 할 물건이나 중요한 일정을 적어주세요."
-                  value={memo}
-                  onChangeText={setMemo}
-                  multiline
-                />
-              </VStack>
+              <InputCard
+                label="알람 이름"
+                placeholder="예: 아침 운동"
+                value={label}
+                onChangeText={setLabel}
+              />
 
               <VStack space="xs">
                 <ToggleRow label="알람 사운드" value={sound} onValueChange={setSound} />

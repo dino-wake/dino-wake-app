@@ -2,6 +2,8 @@ import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import { Alarm } from '@/types/alarm';
 
+// ─── iOS: expo-notifications foreground handler ────────────────────────────────
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -12,6 +14,8 @@ Notifications.setNotificationHandler({
   }),
 });
 
+// ─── 요일 변환 ─────────────────────────────────────────────────────────────────
+
 // app 요일: 0=월, 1=화, 2=수, 3=목, 4=금, 5=토, 6=일
 // expo 요일: 1=일, 2=월, 3=화, 4=수, 5=목, 6=금, 7=토
 function toExpoWeekday(appDay: number): number {
@@ -19,15 +23,50 @@ function toExpoWeekday(appDay: number): number {
   return appDay + 2;          // 월=2, ..., 토=7
 }
 
+// app 요일 → JS Date.getDay() (0=일, 1=월, ..., 6=토)
+function toJsDay(appDay: number): number {
+  return appDay === 6 ? 0 : appDay + 1;
+}
+
+// ─── 날짜 계산 ─────────────────────────────────────────────────────────────────
+
+function nextAlarmDate(hour: number, minute: number): Date {
+  const now = new Date();
+  const d = new Date();
+  d.setHours(hour, minute, 0, 0);
+  if (d <= now) d.setDate(d.getDate() + 1);
+  return d;
+}
+
+function nextAlarmDateForDay(hour: number, minute: number, appDay: number): Date {
+  const jsDay = toJsDay(appDay);
+  const now = new Date();
+  const d = new Date();
+  d.setHours(hour, minute, 0, 0);
+
+  const currentJsDay = d.getDay();
+  let daysUntil = (jsDay - currentJsDay + 7) % 7;
+  if (daysUntil === 0 && d <= now) daysUntil = 7;
+  d.setDate(d.getDate() + daysUntil);
+  return d;
+}
+
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+const REPEAT_WEEKS = 4; // 4주치 예약
+
+// ─── 권한 요청 ─────────────────────────────────────────────────────────────────
+
 export async function requestNotificationPermission(): Promise<boolean> {
   if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('alarms', {
-      name: '알람',
+    await Notifications.setNotificationChannelAsync('alarms-fallback', {
+      name: '알람 (iOS 호환)',
       importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
+      vibrationPattern: [100, 500, 100, 500],
       lightColor: '#3D8A5A',
       sound: 'default',
     });
+
+    // notifee 채널은 scheduleAlarmNotifications 호출 시 생성
   }
 
   const { status, canAskAgain } = await Notifications.getPermissionsAsync();
@@ -38,7 +77,70 @@ export async function requestNotificationPermission(): Promise<boolean> {
   return newStatus === 'granted';
 }
 
-export async function scheduleAlarmNotifications(alarm: Alarm): Promise<string[]> {
+// ─── Android: notifee 스케줄링 ─────────────────────────────────────────────────
+
+async function scheduleAlarmNotificationsAndroid(alarm: Alarm): Promise<string[]> {
+  const notifee = (await import('@notifee/react-native')).default;
+  const { TriggerType, AndroidCategory, AndroidImportance } = await import('@notifee/react-native');
+
+  await notifee.createChannel({
+    id: 'alarms',
+    name: '알람',
+    importance: AndroidImportance.HIGH,
+    vibration: true,
+    vibrationPattern: [100, 500, 100, 500],
+    sound: 'default',
+  });
+
+  const notifContent = {
+    title: alarm.label,
+    body: '알람이 울리고 있어요! 공룡을 깨워주세요 🦕',
+    data: { alarmId: alarm.id },
+    android: {
+      channelId: 'alarms',
+      category: AndroidCategory.ALARM,
+      importance: AndroidImportance.HIGH,
+      fullScreenAction: { id: 'default' },
+      pressAction: { id: 'default' },
+      smallIcon: 'notification_icon',
+    },
+  };
+
+  const ids: string[] = [];
+
+  if (alarm.days.length === 0) {
+    const id = await notifee.createTriggerNotification(notifContent, {
+      type: TriggerType.TIMESTAMP,
+      timestamp: nextAlarmDate(alarm.hour, alarm.minute).getTime(),
+      alarmManager: { allowWhileIdle: true },
+    });
+    ids.push(id);
+  } else {
+    for (const day of alarm.days) {
+      const base = nextAlarmDateForDay(alarm.hour, alarm.minute, day);
+      for (let week = 0; week < REPEAT_WEEKS; week++) {
+        const ts = base.getTime() + week * WEEK_MS;
+        const id = await notifee.createTriggerNotification(notifContent, {
+          type: TriggerType.TIMESTAMP,
+          timestamp: ts,
+          alarmManager: { allowWhileIdle: true },
+        });
+        ids.push(id);
+      }
+    }
+  }
+
+  return ids;
+}
+
+async function cancelAlarmNotificationsAndroid(notificationIds: string[]): Promise<void> {
+  const notifee = (await import('@notifee/react-native')).default;
+  await notifee.cancelTriggerNotifications(notificationIds);
+}
+
+// ─── iOS: expo-notifications 스케줄링 ─────────────────────────────────────────
+
+async function scheduleAlarmNotificationsIOS(alarm: Alarm): Promise<string[]> {
   const ids: string[] = [];
 
   const content: Notifications.NotificationContentInput = {
@@ -49,7 +151,6 @@ export async function scheduleAlarmNotifications(alarm: Alarm): Promise<string[]
   };
 
   if (alarm.days.length === 0) {
-    // 반복 없음: 다음 해당 시각에 1회 발송
     const id = await Notifications.scheduleNotificationAsync({
       content,
       trigger: {
@@ -59,7 +160,6 @@ export async function scheduleAlarmNotifications(alarm: Alarm): Promise<string[]
     });
     ids.push(id);
   } else {
-    // 요일 반복: 각 요일마다 weekly 트리거
     for (const day of alarm.days) {
       const id = await Notifications.scheduleNotificationAsync({
         content,
@@ -77,7 +177,19 @@ export async function scheduleAlarmNotifications(alarm: Alarm): Promise<string[]
   return ids;
 }
 
+// ─── 공개 API ─────────────────────────────────────────────────────────────────
+
+export async function scheduleAlarmNotifications(alarm: Alarm): Promise<string[]> {
+  if (Platform.OS === 'android') {
+    return scheduleAlarmNotificationsAndroid(alarm);
+  }
+  return scheduleAlarmNotificationsIOS(alarm);
+}
+
 export async function cancelAlarmNotifications(notificationIds: string[]): Promise<void> {
+  if (Platform.OS === 'android') {
+    return cancelAlarmNotificationsAndroid(notificationIds);
+  }
   await Promise.all(
     notificationIds.map((id) => Notifications.cancelScheduledNotificationAsync(id)),
   );
@@ -85,6 +197,32 @@ export async function cancelAlarmNotifications(notificationIds: string[]): Promi
 
 export async function scheduleSnoozeNotification(alarm: Alarm): Promise<string> {
   const snoozeDate = new Date(Date.now() + 5 * 60 * 1000);
+
+  if (Platform.OS === 'android') {
+    const notifee = (await import('@notifee/react-native')).default;
+    const { TriggerType, AndroidCategory, AndroidImportance } = await import('@notifee/react-native');
+    return notifee.createTriggerNotification(
+      {
+        title: `${alarm.label} (스누즈)`,
+        body: '5분이 지났어요! 이제 일어날 시간이에요 🦕',
+        data: { alarmId: alarm.id },
+        android: {
+          channelId: 'alarms',
+          category: AndroidCategory.ALARM,
+          importance: AndroidImportance.HIGH,
+          fullScreenAction: { id: 'default' },
+          pressAction: { id: 'default' },
+          smallIcon: 'notification_icon',
+        },
+      },
+      {
+        type: TriggerType.TIMESTAMP,
+        timestamp: snoozeDate.getTime(),
+        alarmManager: { allowWhileIdle: true },
+      },
+    );
+  }
+
   return Notifications.scheduleNotificationAsync({
     content: {
       title: `${alarm.label} (스누즈)`,
@@ -97,12 +235,4 @@ export async function scheduleSnoozeNotification(alarm: Alarm): Promise<string> 
       date: snoozeDate,
     },
   });
-}
-
-function nextAlarmDate(hour: number, minute: number): Date {
-  const now = new Date();
-  const d = new Date();
-  d.setHours(hour, minute, 0, 0);
-  if (d <= now) d.setDate(d.getDate() + 1);
-  return d;
 }

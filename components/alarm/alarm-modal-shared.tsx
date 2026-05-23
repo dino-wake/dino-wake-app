@@ -10,6 +10,7 @@ import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import { TextInput } from 'react-native';
 import { DAY_LABELS } from '@/types/alarm';
+import { DrumRollTimePicker } from './drum-roll-picker';
 
 // ─── 시간 피커 ────────────────────────────────────────────────────────────────
 
@@ -20,63 +21,15 @@ type TimePickerProps = {
   onMinuteChange: (m: number) => void;
 };
 
-function NumberBox({
-  value,
-  max,
-  onChange,
-}: {
-  value: number;
-  max: number;
-  onChange: (v: number) => void;
-}) {
-  return (
-    <Box
-      className="items-center justify-center rounded-[20px]"
-      style={{ width: 110, height: 90, backgroundColor: '#F2F2EF' }}
-    >
-      <HStack className="items-center gap-3">
-        <Pressable
-          onPress={() => onChange((value - 1 + max + 1) % (max + 1))}
-          hitSlop={12}
-          style={{ padding: 8 }}
-        >
-          <Text className="text-dino-text-tertiary" style={{ fontSize: 22, fontWeight: '300' }}>
-            ‹
-          </Text>
-        </Pressable>
-        <Text
-          className="text-dino-text-primary font-bold"
-          style={{ fontSize: 32, minWidth: 44, textAlign: 'center' }}
-        >
-          {String(value).padStart(2, '0')}
-        </Text>
-        <Pressable
-          onPress={() => onChange((value + 1) % (max + 1))}
-          hitSlop={12}
-          style={{ padding: 8 }}
-        >
-          <Text className="text-dino-text-tertiary" style={{ fontSize: 22, fontWeight: '300' }}>
-            ›
-          </Text>
-        </Pressable>
-      </HStack>
-    </Box>
-  );
-}
-
 export function TimePicker({ hour, minute, onHourChange, onMinuteChange }: TimePickerProps) {
   return (
-    <Box className="items-center py-5">
-      <HStack className="items-center gap-3">
-        <NumberBox value={hour} max={23} onChange={onHourChange} />
-        <Text
-          className="text-dino-text-tertiary font-semibold"
-          style={{ fontSize: 40 }}
-        >
-          :
-        </Text>
-        <NumberBox value={minute} max={59} onChange={onMinuteChange} />
-      </HStack>
+    <Box className="items-center py-2">
+      <DrumRollTimePicker
+        hour={hour}
+        minute={minute}
+        onHourChange={onHourChange}
+        onMinuteChange={onMinuteChange}
+      />
     </Box>
   );
 }

@@ -1,4 +1,6 @@
 import { Colors } from '@/constants/theme';
+import { hasTodayWakeLog } from '@/lib/db/wake-logs';
+import { initAlarmDb } from '@/lib/db/alarms';
 import {
   ChevronLeft,
   ChevronRight,
@@ -7,7 +9,10 @@ import {
   Play,
   Sun,
 } from 'lucide-react-native';
-import { ScrollView, View, Pressable } from 'react-native';
+import { useCallback, useState } from 'react';
+import { Image, ScrollView, View, Pressable } from 'react-native';
+import { useFocusEffect } from 'expo-router';
+import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text } from '@/components/ui/text';
 import { Box } from '@/components/ui/box';
@@ -33,6 +38,15 @@ function ForecastIcon({ icon }: { icon: string }) {
 }
 
 export default function BriefingScreen() {
+  const [hasMoodToday, setHasMoodToday] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      initAlarmDb();
+      setHasMoodToday(hasTodayWakeLog());
+    }, []),
+  );
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F5F4F1' }}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -41,8 +55,6 @@ export default function BriefingScreen() {
         <Box
           style={{
             backgroundColor: '#FFFFFF',
-            borderBottomLeftRadius: 24,
-            borderBottomRightRadius: 24,
             padding: 24,
             paddingTop: 16,
             gap: 20,
@@ -121,23 +133,30 @@ export default function BriefingScreen() {
             </Text>
           </Pressable>
 
-          <Pressable
-            style={{
-              flex: 1,
-              height: 56,
-              backgroundColor: '#FFF0E8',
-              borderRadius: 16,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 8,
-            }}
-          >
-            <Text style={{ fontSize: 22 }}>🦕</Text>
-            <Text style={{ fontSize: 13, fontFamily: 'Outfit_600SemiBold', color: '#E07050', lineHeight: 13 * 1.4 }}>
-              {'오늘 기분은\n어때요?'}
-            </Text>
-          </Pressable>
+          {!hasMoodToday && (
+            <Pressable
+              onPress={() => router.push('/emotion-dial')}
+              style={{
+                flex: 1,
+                height: 56,
+                backgroundColor: '#FFF0E8',
+                borderRadius: 16,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 8,
+              }}
+            >
+              <Image
+                source={require('@/assets/images/dino_character.png')}
+                style={{ width: 28, height: 32 }}
+                resizeMode="contain"
+              />
+              <Text style={{ fontSize: 13, fontFamily: 'Outfit_600SemiBold', color: '#E07050', lineHeight: 13 * 1.4 }}>
+                {'오늘 기분은\n어때요?'}
+              </Text>
+            </Pressable>
+          )}
         </HStack>
 
         {/* 뉴스 카드 */}

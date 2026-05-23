@@ -18,6 +18,33 @@ export function initAlarmDb() {
       notification_ids TEXT NOT NULL DEFAULT '[]'
     )
   `);
+  db.execSync(`
+    CREATE TABLE IF NOT EXISTS wake_logs (
+      id TEXT PRIMARY KEY,
+      alarm_id TEXT NOT NULL DEFAULT '',
+      woken_at INTEGER NOT NULL,
+      alarm_hour INTEGER NOT NULL,
+      alarm_minute INTEGER NOT NULL,
+      emotion_level INTEGER NOT NULL
+    )
+  `);
+  db.execSync(`
+    CREATE TABLE IF NOT EXISTS daily_memo (
+      id INTEGER PRIMARY KEY DEFAULT 1,
+      content TEXT NOT NULL DEFAULT '',
+      updated_at INTEGER NOT NULL DEFAULT 0
+    )
+  `);
+  db.execSync(`
+    CREATE TABLE IF NOT EXISTS briefing_settings (
+      id INTEGER PRIMARY KEY DEFAULT 1,
+      narration INTEGER NOT NULL DEFAULT 0,
+      weather INTEGER NOT NULL DEFAULT 1,
+      fortune_zodiac INTEGER NOT NULL DEFAULT 0,
+      fortune_star INTEGER NOT NULL DEFAULT 0,
+      news INTEGER NOT NULL DEFAULT 1
+    )
+  `);
 }
 
 type AlarmRow = {

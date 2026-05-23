@@ -29,6 +29,9 @@ importers:
       '@legendapp/motion':
         specifier: ^2.5.3
         version: 2.5.3(7ad73dfca376d2518a1eb558ffc674a0)
+      '@notifee/react-native':
+        specifier: ^9.1.8
+        version: 9.1.8(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))
       '@react-native-community/netinfo':
         specifier: ^11.4.1
         version: 11.4.1(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))
@@ -47,6 +50,9 @@ importers:
       expo:
         specifier: ~54.0.33
         version: 54.0.33(@babel/core@7.29.0)(@expo/dom-webview@55.0.5)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)
+      expo-audio:
+        specifier: ^1.1.1
+        version: 1.1.1(expo-asset@12.0.12(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       expo-constants:
         specifier: ~18.0.13
         version: 18.0.13(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))
@@ -62,6 +68,9 @@ importers:
       expo-image:
         specifier: ~3.0.11
         version: 3.0.11(expo@54.0.33)(react-native-web@0.21.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      expo-keep-awake:
+        specifier: ^15.0.8
+        version: 15.0.8(expo@54.0.33)(react@19.1.0)
       expo-linking:
         specifier: ~8.0.11
         version: 8.0.11(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -113,6 +122,9 @@ importers:
       react-native-gesture-handler:
         specifier: ~2.28.0
         version: 2.28.0(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      react-native-get-random-values:
+        specifier: ^2.0.0
+        version: 2.0.0(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))
       react-native-reanimated:
         specifier: 4.1.7
         version: 4.1.7(react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -137,10 +149,16 @@ importers:
       tailwind-variants:
         specifier: ^0.1.20
         version: 0.1.20(tailwindcss@3.4.19(yaml@2.8.3))
+      uuid:
+        specifier: ^14.0.0
+        version: 14.0.0
     devDependencies:
       '@types/react':
         specifier: ~19.1.17
         version: 19.1.17
+      '@types/uuid':
+        specifier: ^11.0.0
+        version: 11.0.0
       babel-plugin-module-resolver:
         specifier: ^5.0.0
         version: 5.0.3
@@ -1051,6 +1069,11 @@ packages:
   '@nolyfill/is-core-module@1.0.39':
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
+
+  '@notifee/react-native@9.1.8':
+    resolution: {integrity: sha512-Az/dueoPerJsbbjRxu8a558wKY+gONUrfoy3Hs++5OqbeMsR0dYe6P+4oN6twrLFyzAhEA1tEoZRvQTFDRmvQg==}
+    peerDependencies:
+      react-native: '*'
 
   '@radix-ui/primitive@1.1.3':
     resolution: {integrity: sha512-JTF99U/6XIjCBo0wqkU5sK10glYe27MRRsfwoiq5zzOEZLHU3A3KCMa5X/azekYRCJ0HlwI0crAXS/5dEHTzDg==}
@@ -2036,6 +2059,10 @@ packages:
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
 
+  '@types/uuid@11.0.0':
+    resolution: {integrity: sha512-HVyk8nj2m+jcFRNazzqyVKiZezyhDKrGUA3jlEcg/nZ6Ms+qHwocba1Y/AaVaznJTAM9xpdFSh+ptbNrhOGvZA==}
+    deprecated: This is a stub types definition. uuid provides its own type definitions, so you do not need this installed.
+
   '@types/yargs-parser@21.0.3':
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
 
@@ -3013,6 +3040,14 @@ packages:
       react: '*'
       react-native: '*'
 
+  expo-audio@1.1.1:
+    resolution: {integrity: sha512-CPCpJ+0AEHdzWROc0f00Zh6e+irLSl2ALos/LPvxEeIcJw1APfBa4DuHPkL4CQCWsVe7EnUjFpdwpqsEUWcP0g==}
+    peerDependencies:
+      expo: '*'
+      expo-asset: '*'
+      react: '*'
+      react-native: '*'
+
   expo-constants@18.0.13:
     resolution: {integrity: sha512-FnZn12E1dRYKDHlAdIyNFhBurKTS3F9CrfrBDJI5m3D7U17KBHMQ6JEfYlSj7LG7t+Ulr+IKaj58L1k5gBwTcQ==}
     peerDependencies:
@@ -3207,6 +3242,9 @@ packages:
 
   exponential-backoff@3.1.3:
     resolution: {integrity: sha512-ZgEeZXj30q+I0EN+CbSSpIyPaJ5HVQD18Z1m+u1FXbAeT94mr1zw50q4q6jiiC447Nl/YTcIYSAftiGqetwXCA==}
+
+  fast-base64-decode@1.0.0:
+    resolution: {integrity: sha512-qwaScUgUGBYeDNRnbc/KyllVU88Jk1pRHPStuF/lO7B0/RTRLj7U0lkdTAutlBblY08rwZDff6tNU9cjv6j//Q==}
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
@@ -4711,6 +4749,11 @@ packages:
       react: '*'
       react-native: '*'
 
+  react-native-get-random-values@2.0.0:
+    resolution: {integrity: sha512-wx7/aPqsUIiWsG35D+MsUJd8ij96e3JKddklSdrdZUrheTx89gPtz3Q2yl9knBArj5u26Cl23T88ai+Q0vypdQ==}
+    peerDependencies:
+      react-native: '>=0.81'
+
   react-native-is-edge-to-edge@1.3.1:
     resolution: {integrity: sha512-NIXU/iT5+ORyCc7p0z2nnlkouYKX425vuU1OEm6bMMtWWR9yvb+Xg5AZmImTKoF9abxCPqrKC3rOZsKzUYgYZA==}
     peerDependencies:
@@ -5364,8 +5407,13 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
 
+  uuid@14.0.0:
+    resolution: {integrity: sha512-Qo+uWgilfSmAhXCMav1uYFynlQO7fMFiMVZsQqZRMIXp0O7rR7qjkj+cPvBHLgBqi960QCoo/PH2/6ZtVqKvrg==}
+    hasBin: true
+
   uuid@7.0.3:
     resolution: {integrity: sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   validate-npm-package-name@5.0.1:
@@ -6756,6 +6804,10 @@ snapshots:
       fastq: 1.20.1
 
   '@nolyfill/is-core-module@1.0.39': {}
+
+  '@notifee/react-native@9.1.8(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))':
+    dependencies:
+      react-native: 0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)
 
   '@radix-ui/primitive@1.1.3': {}
 
@@ -8272,6 +8324,10 @@ snapshots:
 
   '@types/stack-utils@2.0.3': {}
 
+  '@types/uuid@11.0.0':
+    dependencies:
+      uuid: 14.0.0
+
   '@types/yargs-parser@21.0.3': {}
 
   '@types/yargs@17.0.35':
@@ -9462,6 +9518,13 @@ snapshots:
       - supports-color
       - typescript
 
+  expo-audio@1.1.1(expo-asset@12.0.12(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0):
+    dependencies:
+      expo: 54.0.33(@babel/core@7.29.0)(@expo/dom-webview@55.0.5)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)
+      expo-asset: 12.0.12(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)
+      react: 19.1.0
+      react-native: 0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)
+
   expo-constants@18.0.13(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)):
     dependencies:
       '@expo/config': 12.0.13
@@ -9709,6 +9772,8 @@ snapshots:
       - utf-8-validate
 
   exponential-backoff@3.1.3: {}
+
+  fast-base64-decode@1.0.0: {}
 
   fast-deep-equal@3.1.3: {}
 
@@ -11528,6 +11593,11 @@ snapshots:
       react: 19.1.0
       react-native: 0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)
 
+  react-native-get-random-values@2.0.0(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)):
+    dependencies:
+      fast-base64-decode: 1.0.0
+      react-native: 0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)
+
   react-native-is-edge-to-edge@1.3.1(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.0(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0):
     dependencies:
       react: 19.1.0
@@ -12336,6 +12406,8 @@ snapshots:
       which-typed-array: 1.1.20
 
   utils-merge@1.0.1: {}
+
+  uuid@14.0.0: {}
 
   uuid@7.0.3: {}
 

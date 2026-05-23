@@ -4,7 +4,6 @@ import { AlarmCard } from "@/components/alarm/alarm-card";
 import { BriefingSection } from "@/components/alarm/briefing-section";
 import { DinoEggSection } from "@/components/alarm/dino-egg-section";
 import { EditAlarmModal } from "@/components/alarm/edit-alarm-modal";
-import { TimeDisplay } from "@/components/alarm/time-display";
 import { Box } from "@/components/ui/box";
 import { Pressable } from "@/components/ui/pressable";
 import { ScrollView } from "@/components/ui/scroll-view";
@@ -33,13 +32,9 @@ export default function HomeScreen() {
 		<SafeAreaView className="flex-1 bg-dino-bg">
 			<ScrollView
 				className="flex-1"
-				contentContainerClassName="px-6 pb-10 gap-5"
+				contentContainerClassName="px-6 pt-16 pb-10 gap-5"
 				showsVerticalScrollIndicator={false}
 			>
-				<Box className="pt-6">
-					<TimeDisplay time="17:30" />
-				</Box>
-
 				<DinoEggSection nextAlarmLabel={nextAlarmLabel} />
 
 				<BriefingSection />

@@ -11,7 +11,7 @@
 - **라우팅**: Expo Router (파일 기반, Next.js 방식)
 - **애니메이션**: React Native Reanimated 4
 - **로컬 DB**: expo-sqlite v16 (동기 API — `openDatabaseSync`)
-- **로컬 알림**: expo-notifications v0.32
+- **로컬 알림**: expo-notifications v0.32 (iOS) / @notifee/react-native (Android — Full-Screen Intent)
 - **패키지 매니저**: pnpm
 
 ## 프로젝트 구조
@@ -30,8 +30,11 @@ hooks/            # 커스텀 훅
   use-alarms.ts   # 알람 CRUD + 알림 스케줄 통합 훅
 lib/
   db/
-    alarms.ts     # SQLite CRUD
-  notifications.ts  # expo-notifications 스케줄링
+    alarms.ts           # SQLite CRUD (alarms, wake_logs, daily_memo, briefing_settings 4개 테이블 초기화)
+    wake-logs.ts        # 기상 로그 CRUD (insertWakeLog, hasTodayWakeLog)
+    daily-memo.ts       # 준비물/일정 메모 단일 레코드 CRUD
+    briefing-settings.ts # 브리핑 설정 단일 레코드 CRUD
+  notifications.ts      # 알림 스케줄링 (Android: @notifee/react-native, iOS: expo-notifications)
 types/
   alarm.ts        # Alarm 타입 정의
 constants/

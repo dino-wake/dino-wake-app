@@ -45,6 +45,7 @@ export default function TabLayout() {
         options={{
           title: '스토어',
           tabBarIcon: ({ color }) => <ShoppingBag size={24} color={color} />,
+          href: null,
         }}
       />
       <Tabs.Screen

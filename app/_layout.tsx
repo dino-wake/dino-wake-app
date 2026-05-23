@@ -1,5 +1,4 @@
 import {
-  DarkTheme,
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
@@ -17,8 +16,8 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef } from "react";
 import "react-native-reanimated";
 import * as Notifications from "expo-notifications";
-
-import { useColorScheme } from "nativewind";
+import { Platform } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { useAppStateRefetch } from "@/hooks/use-app-state-refetch";
 import { useOnlineManager } from "@/hooks/use-online-manager";
@@ -35,7 +34,6 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
-  const { colorScheme } = useColorScheme();
   const [fontsLoaded] = useFonts({
     Outfit_400Regular,
     Outfit_500Medium,
@@ -51,8 +49,48 @@ export default function RootLayout() {
     requestNotificationPermission();
   }, []);
 
+  // ── Android: notifee 이벤트 처리 ────────────────────────────────────────────
+
+  // notifee 포그라운드 이벤트 (앱이 실행 중일 때 알림 도착)
+  useEffect(() => {
+    if (Platform.OS !== 'android') return;
+
+    let unsubscribe: (() => void) | undefined;
+    import('@notifee/react-native').then(({ default: notifee, EventType }) => {
+      unsubscribe = notifee.onForegroundEvent(({ type, detail }) => {
+        if (type === EventType.DELIVERED) {
+          const alarmId = detail.notification?.data?.alarmId as string | undefined;
+          if (alarmId) {
+            router.push({ pathname: '/alarm-ringing', params: { alarmId } });
+          }
+        }
+      });
+    });
+
+    return () => unsubscribe?.();
+  }, []);
+
+  // notifee 초기 알림 (fullScreenAction으로 앱이 실행된 경우)
+  useEffect(() => {
+    if (Platform.OS !== 'android') return;
+
+    import('@notifee/react-native').then(({ default: notifee }) => {
+      notifee.getInitialNotification().then((initialNotification) => {
+        if (initialNotification) {
+          const alarmId = initialNotification.notification.data?.alarmId as string | undefined;
+          if (alarmId) {
+            router.push({ pathname: '/alarm-ringing', params: { alarmId } });
+          }
+        }
+      });
+    });
+  }, []);
+
+  // ── iOS: expo-notifications 이벤트 처리 ─────────────────────────────────────
+
   // 포그라운드에서 알림 수신 시 알람 울림 화면으로 이동
   useEffect(() => {
+    if (Platform.OS === 'android') return;
     const sub = Notifications.addNotificationReceivedListener((notification) => {
       const alarmId = notification.request.content.data?.alarmId as string | undefined;
       if (alarmId) {
@@ -66,6 +104,7 @@ export default function RootLayout() {
   const lastResponse = Notifications.useLastNotificationResponse();
   const lastResponseRef = useRef<string | null>(null);
   useEffect(() => {
+    if (Platform.OS === 'android') return;
     if (!lastResponse) return;
     const requestId = lastResponse.notification.request.identifier;
     if (lastResponseRef.current === requestId) return;
@@ -84,11 +123,10 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <QueryClientProvider client={queryClient}>
-      <GluestackUIProvider mode="system">
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
+      <GluestackUIProvider mode="light">
+        <ThemeProvider value={DefaultTheme}>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="alarm-ringing" options={{ headerShown: false, presentation: "fullScreenModal" }} />
@@ -111,5 +149,6 @@ export default function RootLayout() {
         </ThemeProvider>
       </GluestackUIProvider>
     </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }

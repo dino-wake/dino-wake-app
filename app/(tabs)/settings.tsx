@@ -7,7 +7,7 @@ import {
   LayoutGrid,
   ListChecks,
   Mic,
-  Moon,
+  // Moon, // 다크 모드 비활성화로 미사용
   Palette,
   Pencil,
   Vibrate,
@@ -111,7 +111,7 @@ export default function SettingsScreen() {
   const [vibrate, setVibrate] = useState(true);
   const [briefingOn, setBriefingOn] = useState(true);
   const [tts, setTts] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+  // const [darkMode, setDarkMode] = useState(false); // 다크 모드 미지원 (라이트 모드 고정)
 
   const toggleStyle = (value: boolean) => ({
     trackColor: { false: Colors.light.border, true: Colors.light.accentGreenLight },
@@ -310,6 +310,7 @@ export default function SettingsScreen() {
         <Box style={{ paddingHorizontal: 20, paddingTop: 24, paddingBottom: 32, gap: 8 }}>
           <SectionLabel label="앱" />
           <SectionCard>
+            {/* 다크 모드 토글 — 라이트 모드 고정으로 비활성화
             <SettingsRow
               icon={<Moon size={16} color="#8B6FD4" />}
               iconBg="#EEE8FF"
@@ -325,6 +326,7 @@ export default function SettingsScreen() {
               }
             />
             <Divider />
+            */}
             <SettingsRow
               icon={<Info size={16} color="#8B6FD4" />}
               iconBg="#EEE8FF"

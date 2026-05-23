@@ -18,7 +18,7 @@ export function DinoEggSection({ nextAlarmLabel }: DinoEggSectionProps) {
         style={{ width: 127, height: 134 }}
       />
       <Box className="rounded-full bg-dino-mint-light px-4 py-1.5">
-        <Text className="text-dino-label tracking-dino-caps font-semibold text-dino-mint">
+        <Text className="text-dino-label tracking-dino-caps font-semibold text-dino-accent-green-dark">
           {nextAlarmLabel}
         </Text>
       </Box>

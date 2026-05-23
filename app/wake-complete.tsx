@@ -1,6 +1,6 @@
 import { Colors } from '@/constants/theme';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Image, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Box } from '@/components/ui/box';
 import { HStack } from '@/components/ui/hstack';
@@ -31,7 +31,11 @@ export default function WakeCompleteScreen() {
       <VStack style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, gap: 32 }}>
 
         {/* 캐릭터 */}
-        <Text style={{ fontSize: 100 }}>🦕</Text>
+        <Image
+          source={require('@/assets/images/dino_character.png')}
+          style={{ width: 160, height: 180 }}
+          resizeMode="contain"
+        />
 
         {/* 완료 메시지 */}
         <VStack style={{ alignItems: 'center', gap: 12 }}>
@@ -59,51 +63,32 @@ export default function WakeCompleteScreen() {
           </Text>
         </VStack>
 
-        {/* 포인트 적립 카드 */}
-        <Box
-          style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: 20,
-            paddingHorizontal: 28,
-            paddingVertical: 20,
-            width: '100%',
-            shadowColor: Colors.light.shadow,
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.06,
-            shadowRadius: 12,
-            elevation: 3,
-            gap: 16,
-          }}
-        >
-          <HStack style={{ alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text style={{ fontSize: 14, fontFamily: 'Outfit_500Medium', color: Colors.light.icon }}>
-              오늘의 기분
-            </Text>
-            <Text style={{ fontSize: 14, fontFamily: 'Outfit_600SemiBold', color: Colors.light.text }}>
-              {moodLabel}
-            </Text>
-          </HStack>
-
-          <Box style={{ height: 1, backgroundColor: Colors.light.border }} />
-
-          <HStack style={{ alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text style={{ fontSize: 14, fontFamily: 'Outfit_500Medium', color: Colors.light.icon }}>
-              적립 포인트
-            </Text>
-            <HStack style={{ alignItems: 'center', gap: 4 }}>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: 'Outfit_700Bold',
-                  color: '#3D8A5A',
-                }}
-              >
-                +10
+        {/* 오늘의 기분 카드 — mood가 있을 때만 표시 */}
+        {!!moodLabel && moodLabel !== '기상' && (
+          <Box
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: 20,
+              paddingHorizontal: 28,
+              paddingVertical: 20,
+              width: '100%',
+              shadowColor: Colors.light.shadow,
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.06,
+              shadowRadius: 12,
+              elevation: 3,
+            }}
+          >
+            <HStack style={{ alignItems: 'center', justifyContent: 'space-between' }}>
+              <Text style={{ fontSize: 14, fontFamily: 'Outfit_500Medium', color: Colors.light.icon }}>
+                오늘의 기분
               </Text>
-              <Text style={{ fontSize: 14, fontFamily: 'Outfit_500Medium', color: '#3D8A5A' }}>P</Text>
+              <Text style={{ fontSize: 14, fontFamily: 'Outfit_600SemiBold', color: Colors.light.text }}>
+                {moodLabel}
+              </Text>
             </HStack>
-          </HStack>
-        </Box>
+          </Box>
+        )}
 
         {/* 홈으로 버튼 */}
         <Pressable
