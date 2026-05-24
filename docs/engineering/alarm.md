@@ -94,6 +94,49 @@ maven { url "$rootDir/../node_modules/@notifee/react-native/android/libs" }
 
 `vibrationPattern`은 **모두 양수값**이어야 함 (0 포함 시 notifee 크래시): `[100, 500, 100, 500]`
 
+### Android 알림 채널
+
+채널 ID: `alarms-v2` (상수 `ALARM_CHANNEL_ID`로 관리)
+
+Android는 채널 설정을 한 번 생성하면 캐싱한다. `bypassDnd`, `importance` 등 설정을 변경할 때는 채널 ID를 새 버전으로 올려야 반영된다.
+
+### Android 권한 구성
+
+`app.json` `android.permissions`에 선언, `plugins/withAndroidAlarmConfig.js`로 추가 설정 주입:
+
+| 권한 | 용도 |
+|------|------|
+| `USE_FULL_SCREEN_INTENT` | 잠금화면에서 알람 화면 표시 |
+| `WAKE_LOCK` | 화면 켜기 유지 |
+| `SCHEDULE_EXACT_ALARM` | 정확한 시간에 알람 트리거 |
+| `USE_EXACT_ALARM` | 정확한 알람 (시스템 레벨) |
+| `VIBRATE` | 진동 |
+| `RECEIVE_BOOT_COMPLETED` | 기기 재부팅 후 알람 복구 |
+
+`withAndroidAlarmConfig.js` 플러그인이 prebuild 시 `AndroidManifest.xml`에 자동 추가:
+- `android:showWhenLocked="true"` — 잠금화면 위에 액티비티 표시
+- `android:turnScreenOn="true"` — 알람 시 화면 자동 켜기
+- `SET_ALARM` intent-filter — OS가 이 앱을 알람 앱으로 인식 (`USE_FULL_SCREEN_INTENT` 자동 부여 조건)
+
+> **pnpm 주의**: `plugins/` 내 커스텀 플러그인에서 `@expo/config-plugins`를 require할 때 pnpm strict 모드로 인해 직접 require가 실패할 수 있다. expo를 통해 resolve해야 한다:
+> ```js
+> const { withAndroidManifest } = require(
+>   require.resolve('@expo/config-plugins', { paths: [require.resolve('expo')] }),
+> );
+> ```
+
+### Android 런타임 권한 요청
+
+`lib/notifications.ts`에서 export하는 함수:
+
+| 함수 | 용도 |
+|------|------|
+| `requestNotificationPermission()` | 앱 시작 시 POST_NOTIFICATIONS + SCHEDULE_EXACT_ALARM 요청 |
+| `requestExactAlarmPermission()` | SCHEDULE_EXACT_ALARM 미허용 시 설정화면으로 이동 |
+| `openFullScreenIntentSettings()` | Android 14+ USE_FULL_SCREEN_INTENT 설정화면으로 이동 |
+
+설정 탭에 `requestExactAlarmPermission`, `openFullScreenIntentSettings` 바로가기 버튼이 있다.
+
 ### 요일 매핑
 
 앱의 요일 인덱스(0=월)와 expo-notifications의 weekday(1=일)가 다르다.
@@ -227,8 +270,10 @@ KNOB_R    = 124   (링 중간선)
 
 | 상황 | 처리 |
 |------|------|
-| 포그라운드 | `notifee.onForegroundEvent({ type: DELIVERED })` → `/alarm-ringing?alarmId=` 로 push |
-| 앱 종료 후 Full-Screen Intent | `notifee.getInitialNotification()` → 동일하게 push |
+| 포그라운드 | `notifee.onForegroundEvent({ type: DELIVERED \| PRESS })` → `/alarm-ringing?alarmId=` 로 push |
+| 앱 종료 후 Full-Screen Intent | `notifee.getInitialNotification()` → state 저장 → 네비게이션 준비 후 push |
 | 백그라운드 | `notifee.onBackgroundEvent()` — `index.js` 최상단에 등록 (빈 핸들러) |
 
 모든 notifee 코드는 `Platform.OS === 'android'` 가드로 감싼다.
+
+**getInitialNotification 타이밍 주의**: `fullScreenAction`으로 앱이 실행될 때 `getInitialNotification()`은 컴포넌트 mount 즉시 호출되지만, `fontsLoaded === false`이면 Stack이 아직 렌더링되지 않아 `router.push`가 무시된다. 이를 방지하기 위해 alarmId를 `pendingAlarmId` state에 저장하고, `fontsLoaded && pendingAlarmId` 조건이 충족될 때 navigate한다.

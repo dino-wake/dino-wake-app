@@ -1,4 +1,5 @@
 import { Colors } from '@/constants/theme';
+import { openFullScreenIntentSettings, requestExactAlarmPermission } from '@/lib/notifications';
 import {
   Bell,
   ChevronRight,
@@ -10,10 +11,11 @@ import {
   // Moon, // 다크 모드 비활성화로 미사용
   Palette,
   Pencil,
+  Shield,
   Vibrate,
 } from 'lucide-react-native';
 import { ReactNode, useState } from 'react';
-import { ScrollView, Switch, View, Pressable } from 'react-native';
+import { Platform, ScrollView, Switch, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text } from '@/components/ui/text';
 import { Box } from '@/components/ui/box';
@@ -259,6 +261,32 @@ export default function SettingsScreen() {
               sub="5분 간격, 3회"
               right={<ChevronRight size={16} color={Colors.light.icon} />}
             />
+            {Platform.OS === 'android' && (
+              <>
+                <Divider />
+                <SettingsRow
+                  icon={<Shield size={16} color="#3D8A5A" />}
+                  iconBg="#DFF0E5"
+                  title="정확한 알람 권한"
+                  sub="알람이 정확한 시간에 울리도록 허용"
+                  onPress={requestExactAlarmPermission}
+                  right={<ChevronRight size={16} color={Colors.light.icon} />}
+                />
+                {Platform.Version >= 34 && (
+                  <>
+                    <Divider />
+                    <SettingsRow
+                      icon={<Shield size={16} color="#3D8A5A" />}
+                      iconBg="#DFF0E5"
+                      title="전체화면 알람 권한"
+                      sub="다른 앱 사용 중에도 알람 화면 표시"
+                      onPress={openFullScreenIntentSettings}
+                      right={<ChevronRight size={16} color={Colors.light.icon} />}
+                    />
+                  </>
+                )}
+              </>
+            )}
           </SectionCard>
         </Box>
 

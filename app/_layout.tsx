@@ -13,7 +13,7 @@ import {
 import { Stack, router } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "react-native-reanimated";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
@@ -40,6 +40,9 @@ export default function RootLayout() {
     Outfit_600SemiBold,
     Outfit_700Bold,
   });
+
+  // fullScreenAction으로 앱 실행 시 라우팅할 alarmId (네비게이션 준비 전에 수신될 수 있어서 state로 보관)
+  const [pendingAlarmId, setPendingAlarmId] = useState<string | null>(null);
 
   useOnlineManager();
   useAppStateRefetch();
@@ -70,7 +73,8 @@ export default function RootLayout() {
     return () => unsubscribe?.();
   }, []);
 
-  // notifee 초기 알림 (fullScreenAction으로 앱이 실행된 경우)
+  // notifee 초기 알림 수집 (fullScreenAction으로 앱 실행 시)
+  // 네비게이션이 아직 마운트 전일 수 있어서 state에만 저장
   useEffect(() => {
     if (Platform.OS !== 'android') return;
 
@@ -78,13 +82,18 @@ export default function RootLayout() {
       notifee.getInitialNotification().then((initialNotification) => {
         if (initialNotification) {
           const alarmId = initialNotification.notification.data?.alarmId as string | undefined;
-          if (alarmId) {
-            router.push({ pathname: '/alarm-ringing', params: { alarmId } });
-          }
+          if (alarmId) setPendingAlarmId(alarmId);
         }
       });
     });
   }, []);
+
+  // 네비게이션 준비(fontsLoaded) 후 pendingAlarmId가 있으면 알람 화면으로 이동
+  useEffect(() => {
+    if (!fontsLoaded || !pendingAlarmId) return;
+    router.push({ pathname: '/alarm-ringing', params: { alarmId: pendingAlarmId } });
+    setPendingAlarmId(null);
+  }, [fontsLoaded, pendingAlarmId]);
 
   // ── iOS: expo-notifications 이벤트 처리 ─────────────────────────────────────
 

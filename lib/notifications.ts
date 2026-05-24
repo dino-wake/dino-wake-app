@@ -74,8 +74,13 @@ export async function requestNotificationPermission(): Promise<boolean> {
       const result = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
       );
-      return result === PermissionsAndroid.RESULTS.GRANTED;
+      if (result !== PermissionsAndroid.RESULTS.GRANTED) return false;
     }
+
+    // Android 12+ (API 31+): SCHEDULE_EXACT_ALARM 권한 확인
+    // alarmManager trigger가 정확한 시간에 울리려면 필수
+    await requestExactAlarmPermission();
+
     return true;
   }
 
@@ -87,6 +92,17 @@ export async function requestNotificationPermission(): Promise<boolean> {
     ios: { allowSound: true },
   });
   return newStatus === 'granted';
+}
+
+// Android 12+(API 31+): SCHEDULE_EXACT_ALARM 권한 확인 및 설정 화면 유도
+export async function requestExactAlarmPermission(): Promise<void> {
+  if (Platform.OS !== 'android' || Platform.Version < 31) return;
+  const notifee = (await import('@notifee/react-native')).default;
+  const { AndroidNotificationSetting } = await import('@notifee/react-native');
+  const settings = await notifee.getNotificationSettings();
+  if (settings.android.alarm !== AndroidNotificationSetting.ENABLED) {
+    await notifee.openAlarmPermissionSettings();
+  }
 }
 
 // Android 14+(API 34+): USE_FULL_SCREEN_INTENT 설정 화면으로 이동
