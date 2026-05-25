@@ -64,6 +64,8 @@ export default function RootLayout() {
         if (type === EventType.DELIVERED || type === EventType.PRESS) {
           const alarmId = detail.notification?.data?.alarmId as string | undefined;
           if (alarmId) {
+            // 알림을 취소해 AppState 핸들러의 getDisplayedNotifications()에서 중복 감지되지 않도록
+            if (detail.notification?.id) notifee.cancelDisplayedNotification(detail.notification.id);
             router.push({ pathname: '/alarm-ringing', params: { alarmId } });
           }
         }
