@@ -16,7 +16,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
 import "react-native-reanimated";
 import * as Notifications from "expo-notifications";
-import { Platform } from "react-native";
+import { AppState, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { useAppStateRefetch } from "@/hooks/use-app-state-refetch";
@@ -94,6 +94,29 @@ export default function RootLayout() {
     router.push({ pathname: '/alarm-ringing', params: { alarmId: pendingAlarmId } });
     setPendingAlarmId(null);
   }, [fontsLoaded, pendingAlarmId]);
+
+  // 백그라운드 → 포그라운드 전환 시 표시 중인 알람 알림 감지 → alarm-ringing 라우팅
+  // fullScreenAction이 백그라운드 앱을 전환할 때 onForegroundEvent/getInitialNotification이 동작하지 않는 케이스 보완
+  useEffect(() => {
+    if (Platform.OS !== 'android') return;
+
+    const handleActive = async () => {
+      const { default: notifee } = await import('@notifee/react-native');
+      const displayed = await notifee.getDisplayedNotifications();
+      const alarmNotif = displayed.find(
+        (n) => n.notification.android?.channelId === 'alarms-v2' && n.notification.data?.alarmId,
+      );
+      if (!alarmNotif) return;
+      const alarmId = alarmNotif.notification.data?.alarmId as string;
+      await notifee.cancelDisplayedNotification(alarmNotif.id!);
+      router.push({ pathname: '/alarm-ringing', params: { alarmId } });
+    };
+
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state === 'active') handleActive();
+    });
+    return () => sub.remove();
+  }, []);
 
   // ── iOS: expo-notifications 이벤트 처리 ─────────────────────────────────────
 
